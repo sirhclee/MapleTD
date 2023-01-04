@@ -1,0 +1,19 @@
+:root{
+    background: steelblue;
+}
+
+
+img{
+    display: none; 
+}
+
+#gameScreen{
+    border: 1px solid black;
+}
+
+.flex-container{ 
+    display:flex;    
+    margin: 15 -5px;
+    border: 2px solid black;
+    border-radius: 2px; 
+}

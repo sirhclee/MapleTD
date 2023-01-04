@@ -1,0 +1,72 @@
+{
+    "wave1-0":[ ["spore", 2, 1], ["spore", 3, 2]],
+
+    "wave1-1":
+        [ ["spore", 2, 2], ["spore", 2, 3], 
+        ["spore", 2, 4],["spore", 2, 5], ["spore", 2, 6],
+
+        ["spore", 3, 10], ["spore", 3, 11], 
+        ["spore", 3, 12],["spore", 3, 13], ["spore", 3, 14],
+   
+        ["spore", 1, 18], ["spore", 1, 19], 
+        ["spore", 1, 20],["spore", 1, 21], ["spore", 1, 22]    
+        ],
+  
+    "wave1-2":
+        [ ["orangeMushroom", 2, 2], ["spore", 2, 3], 
+         ["orangeMushroom", 2, 5], ["spore", 2, 6],
+
+        ["orangeMushroom", 3, 10], ["spore", 3, 11], 
+        ["orangeMushroom", 3, 13], ["spore", 3, 14],
+   
+        ["orangeMushroom", 1, 18], ["spore", 1, 19], 
+         ["orangeMushroom", 1, 21], ["spore", 1, 22],  
+        
+        ["orangeMushroom", 2, 24], ["orangeMushroom", 2, 26], 
+        ["orangeMushroom", 2, 28]
+        ],
+
+    "wave1-3":
+        [ ["greenMushroom", 2, 2], ["orangeMushroom", 2, 4], 
+         ["orangeMushroom", 2, 5],["orangeMushroom", 2, 6],
+
+        ["greenMushroom", 3, 10], ["orangeMushroom", 3, 12], 
+        ["orangeMushroom", 3, 13], ["orangeMushroom", 3, 14],
+   
+        ["greenMushroom", 1, 18], ["orangeMushroom", 1, 20], 
+         ["orangeMushroom", 1, 21], ["orangeMushroom", 1, 22],
+        
+        ["greenMushroom", 3, 24], ["greenMushroom", 2, 25], 
+        ["greenMushroom", 1, 26], ["greenMushroom", 3, 27], 
+        ["greenMushroom", 2, 28], ["greenMushroom", 1, 29]
+        ],
+    "wave1-4":
+        [ ["blueMushroom", 2, 2], ["orangeMushroom", 2, 4], 
+         ["orangeMushroom", 2, 5],["orangeMushroom", 2, 6],
+
+         ["blueMushroom", 2, 10], ["greenMushroom", 3, 12], 
+         ["greenMushroom", 3, 13], ["orangeMushroom", 3, 14],
+         ["orangeMushroom", 3, 15], ["spore", 3, 16], 
+         ["spore", 3, 17], ["spore", 3, 18],
+    
+         ["blueMushroom", 2, 18], ["greenMushroom", 1, 19], 
+         ["greenMushroom", 1, 20], ["orangeMushroom", 1, 21],
+         ["orangeMushroom", 1, 22], ["spore", 1, 23], 
+         ["spore", 1, 24], ["spore", 1, 25],
+         
+         ["blueMushroom", [1,2,3], 30]
+    ],
+
+    "wave1-5":
+    [ ["mushmom", [1,2,3], 2], 
+    ["orangeMushroom", [1,2,3], 3],
+    ["orangeMushroom", [1,2,3], 4],
+    ["orangeMushroom", [1,2,3], 5],
+    ["hornyMushroom", [1,2,3], 6],
+    ["hornyMushroom", [1,2,3], 7]
+    ]
+
+
+
+        
+}

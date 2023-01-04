@@ -1,0 +1,54 @@
+{
+    "zombie": 
+        {
+            "speed": "1", "health": "2", 
+            "stand": 2, "walk":2, "die":10, "angry": 9,
+            "sprite": "mob", 
+            "atkSpd": 100, "damage": 1, 
+            "value": 5
+        }, 
+    "spore":
+        {
+            "speed": "1", "health": "2", 
+            "stand": 2, "walk":2, "die":3, "yOff": 35,
+            "sprite": "mob",   
+            "value": 1
+        },
+    "orangeMushroom":
+        {
+            "speed": "1", "health": "2", 
+            "stand": 1, "walk":2, "die":2, "yOff": 20,
+            "sprite": "mob",  
+            "value": 2
+        },
+    "greenMushroom":
+        {
+            "speed": "2", "health": "1", 
+            "stand": 1, "walk":2, "die":2, "yOff": 30,
+            "sprite": "mob",  
+            "value": 2
+        },
+    "blueMushroom":
+        {
+            "speed": "1", "health": "5", 
+            "stand": 1, "walk":2, "die":2, "yOff": 20,
+            "sprite": "mob",  
+            "value": 5
+        },  
+    "hornyMushroom":
+        {
+            "speed": "2", "health": "3", 
+            "stand": 2, "walk":2, "die":3, "yOff": 30,
+            "sprite": "mob",  
+            "value": 2
+        },
+    "mushmom": 
+        {
+            "speed": "1", "health": "30", 
+            "stand": 0, "walk":5, "die":5, "angry": 4,
+            "sprite": "mob", 
+            "atkSpd": 100, "damage": 1, 
+            "value": 100
+        }
+
+}

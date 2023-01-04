@@ -1,0 +1,43 @@
+{
+    "redDragon": 
+        {
+            "speed": "0", "proj": "fireball",
+            "stand": 9, "walk":0, "die":0, "angry": 6,
+            "sprite": "pet", "xOff":-35, "yOff":-20,
+            "atkSpd": 100, "damage": 2, 
+            "value": 100
+        }, 
+    "blueDragon": 
+        {
+            "speed": "0", "proj": "iceball",
+            "stand": 9, "walk":0, "die":0, "angry": 6,
+            "sprite": "pet", "xOff":-35, "yOff":-20,
+            "atkSpd": 75, "damage": 1.5, 
+            "value": 100
+        }, 
+    "greenDragon": 
+        {
+            "speed": "0", "proj": "poisonball",
+            "stand": 9, "walk":0, "die":0, "angry": 6,
+            "sprite": "pet", "xOff":-35, "yOff":-20,
+            "atkSpd": 50, "damage": 1, 
+            "value": 100
+        },
+
+    "blackDragon": 
+        {
+            "speed": "0", "proj": "poisonball",
+            "stand": 9, "walk":0, "die":0, "angry": 6,
+            "sprite": "pet", "xOff":-35, "yOff":-20,
+            "atkSpd": 50, "damage": 1, 
+            "value": 100
+        },  
+    "mushroomKnight": 
+        {
+            "speed": "0", "health": 25,
+            "stand": 5, "walk":0, "die":0, "angry": 10,
+            "sprite": "mob", 
+            "atkSpd": 200, "damage": 5, 
+            "value": 100, "xOff":-135, "yOff":-40
+        } 
+}
