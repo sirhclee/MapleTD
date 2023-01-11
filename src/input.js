@@ -3,26 +3,40 @@ export default class InputHandler{
         document.addEventListener('keydown', (event) =>{    
             switch(event.keyCode){ //a:65; s:83; d:68, w: 87;
                 case 65: //A move left 
-                    player.speedX = -player.speed; 
-                    
-                    player.left = true;
+                    if (upgrade.display){
+                        if(upgrade.selectionX>1){upgrade.selectionX-=1};
+                        }
+                    else {
+                        player.speedX = -player.speed; 
+                        player.left = true;}
                     break;
 
                 case 68: //D move right
+                if (upgrade.display){
+                    if(upgrade.selectionX<2){upgrade.selectionX+=1};
+                    }
+                else {
                     player.speedX = player.speed; 
-                    player.left = false;
+                    player.left = false;}
                     break;
 
                 case 87: //W teleport up
-                    player.teleport(-1);
+                if (upgrade.display){
+                    if(upgrade.selectionY>1){upgrade.selectionY-=1};
+                    }
+                else {player.teleport(-1);}
                     break
                 case 83: //S teleport down
-                    player.teleport(1);
+                if (upgrade.display){
+                    if(upgrade.selectionY<5){upgrade.selectionY+=1};
+                    }
+                else {player.teleport(1);}
                     break
 
 
                 case 74:  //J 
-                    if (!player.jump){
+                if (upgrade.display){upgrade.purchase(Game)}    
+                else if (!player.jump){
                     player.speedY = 12;
                     player.jump = true;}
                     //console.log('jump[!')
@@ -32,8 +46,14 @@ export default class InputHandler{
                     player.attack();
                     break
 
+                case 79: //O
+                    if (Game.waveFinish){Game.nextWave = true; 
+                        Game.startMenu.display = false}; 
                 case 96:
                     upgrade.toggleMenu(); 
+                    break
+                case 80: 
+                upgrade.toggleMenu(); 
                     break
 
                 case 97: //1

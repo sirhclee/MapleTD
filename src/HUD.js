@@ -12,9 +12,15 @@ export default class HUD{
 
     displayHUD(ctx, game){
         ctx.fillStyle = "white";
-        ctx.fillRect(this.x, this.y, this.width, this.height);
-        ctx.fillStyle = 'black';
+        ctx.strokeStyle = "black";
+        ctx.lineWidth = "5"; 
+        ctx.beginPath();
+        ctx.roundRect(this.x, this.y, this.width, this.height, 2);
+        ctx.stroke();
+        ctx.fill();
+        
         ctx.textAlign = 'left'; 
+        ctx.fillStyle ='black';
         ctx.font = this.font;
 
         this.lives = "Lives: " + game.player.health; 

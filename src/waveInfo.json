@@ -1,6 +1,9 @@
 {
-    "wave1-0":[ ["spore", 2, 1], ["spore", 3, 2]],
+    "level1":["wave1-0"],
+    "level2":["wave2-0"],
 
+    "wave1-0":[ ["spore", 2, 1]],
+    "wave2-0":[ ["stump", 2, 1]],
     "wave1-1":
         [ ["spore", 2, 2], ["spore", 2, 3], 
         ["spore", 2, 4],["spore", 2, 5], ["spore", 2, 6],
@@ -58,12 +61,14 @@
     ],
 
     "wave1-5":
-    [ ["mushmom", [1,2,3], 2], 
-    ["orangeMushroom", [1,2,3], 3],
-    ["orangeMushroom", [1,2,3], 4],
-    ["orangeMushroom", [1,2,3], 5],
-    ["hornyMushroom", [1,2,3], 6],
-    ["hornyMushroom", [1,2,3], 7]
+    [ 
+    ["spore", 1, 2], ["orangeMushroom", 2, 2], ["greenMushroom", 3, 2], 
+    ["blueMushroom", 1, 5], ["hornyMushroom", 2, 5], ["mushmom", 3, 5], 
+    ["stump", 1, 8], ["darkStump", 2, 8], ["axeStump", 3, 8],
+    ["ghostStump", 1, 12], ["boar", 2, 12], ["fireBoar", 3, 12],
+    ["ironBoar", 3, 15]
+   
+
     ]
 
 

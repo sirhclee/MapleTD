@@ -4,12 +4,12 @@ export default class startScreen{
         this.gameWidth = game.gameWidth;
         this.gameHeight = game.gameHeight;
         this.width =  600;
-        this.height = 230; // game.gameHeight - 3*90; 
+        this.height = 170; // game.gameHeight - 3*90; 
         this.x = (game.gameWidth-this.width)/2; 
-        this.y = 0;//(this.height)
+        this.y = 3;//(this.height)
         this.padding = 25; 
         this.font = "16px arial";
-        this.font2 = "20px arial";
+        this.font2 = "24px arial";
         this.display = true; 
         this.controls = ["Stop the monsters from advancing!"," - Use (WASD) to move, (J) to jump, and (K) to shoot. Use (P) to open shop. ", 
             " - Collect the coins monsters drop before they expire", 
@@ -72,20 +72,32 @@ export default class startScreen{
         }
 
      
-        displayMenu(ctx){ //upgrade window background
+        displayMenu(ctx, game){ //upgrade window background
+            if (this.display || game.waveFinish){
+                ctx.font = this.font2; 
+                ctx.textAlign = 'center'; 
+                ctx.fillText('Press [P] to resummon allies', this.gameWidth/2, this.height-5) 
+                ctx.fillText('Press [O] to start wave', this.gameWidth/2, this.height + 25) 
+            }
+
             if (this.display){
                 ctx.fillStyle = "white";
-                ctx.fillRect(this.x, this.y, this.width, this.height);
+                ctx.strokeStyle = "black";
+                ctx.lineWidth = "5"; 
+                ctx.beginPath();
+                ctx.roundRect(this.x, this.y, this.width, this.height, 2);
+                ctx.stroke();
+                ctx.fill();
                 ctx.fillStyle = 'black';
                 ctx.textAlign = 'start'; 
                 ctx.font = this.font;
                 for (let i=0; i<this.controls.length; i++){
                     ctx.fillText(this.controls[i], this.x+this.padding, this.y+this.padding*(1+i), this.width); 
                 }
-                this.redraw(ctx); //draw button
-    
+                // this.redraw(ctx); //draw start button
                 //
             }   
+
             // else {document.getElementById('start').innerHTML="";}
             
     

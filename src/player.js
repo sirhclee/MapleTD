@@ -5,11 +5,11 @@ export default class Player {
     constructor(game){
         this.gameWidth = game.gameWidth;
         this.gameHeight = game.gameHeight;
-        this.width = 80; //sprite size 
+        this.width = 50; //sprite size 
         this.height = 80; 
         this.position = {  //position 
             x: this.width/2, 
-            y: this.gameHeight - 10 - 2*game.rowHeight,
+            y: this.gameHeight - 45 - 2*game.rowHeight,
         }
         this.playerX = this.position.x - this.width/2 +18; 
         this.elePositions = [ [this.playerX -60, this.position.y], [this.playerX -40, this.position.y-40],
@@ -17,11 +17,11 @@ export default class Player {
             [this.playerX +60, this.position.y] ];
         this.rowHeight = game.rowHeight;
         this.lane = 1; 
-        this.floor =  this.gameHeight - 10 - (1+this.lane)*this.rowHeight
+        this.floor =  this.gameHeight - 45 - (1+this.lane)*this.rowHeight
         this.maxSpeed = 15; 
         this.speed = 3;
         this.knockbackForce = 0; 
-        this.left = true;
+        this.left = false;
         
         this.speedX = 0;
         this.speedY = 0; 
@@ -54,8 +54,9 @@ export default class Player {
         this.elementals();
 
         this.summonCount = 0; 
-        this.money = 10000; 
-        this.summonCost = [40, 80, 160, 320, 640,1000,1000,1000,1000,1000 ];
+        this.money = 1500; 
+        this.summonCost = [40, 80, 160, 320, 640];
+        this.upgradeCost = [100, 200, 400, 800, 1600]; 
         this.elementCost = [50, 100, 200, 400, 800]; 
 
 
@@ -110,14 +111,14 @@ export default class Player {
         const animation = this.animations.find((animation)=>animation.isFor(this.state))
         const image = animation.getImage();   //get sprite
 
-        //if (this.invulnTime%5>=2 && this.invulnTime>0) {ctx.filter = 'brightness(0.9)'};
-        //ctx.fillRect(this.position.x, this.position.y, this.width, this.height) //hitbox
-        ctx.fillRect(this.curTile*80, this.position.y, 80, 80); //selected tile
+        if (this.invulnTime%4>=1 && this.invulnTime>0) {ctx.globalAlpha = 0.2};
+        //ctx.fillRect(this.position.x+15, this.position.y, this.width, this.height) //hitbox
+        //ctx.fillRect(this.curTile*80, this.position.y, 80, 80); //selected tile
         if (this.left){
             ctx.scale(-1,1);
-            ctx.drawImage(image, -this.position.x-this.width, this.position.y);}
-        else {ctx.drawImage(image, this.position.x, this.position.y); }
-        ctx.filter = 'none';
+            ctx.drawImage(image, -this.position.x-1.5*this.width-10, this.position.y);}
+        else {ctx.drawImage(image, this.position.x-5, this.position.y); }
+        ctx.globalAlpha = 1;
         ctx.setTransform(1,0,0,1,0,0);
         
         if (animation.shouldStop()){ //resets 
@@ -159,7 +160,7 @@ export default class Player {
         if (this.lane - 1*direction>-1 && this.lane - 1*direction<3){
             this.position.y += this.rowHeight*direction;2
             this.lane += -1*direction; 
-            this.floor =  this.gameHeight - 10 - (1+this.lane)*this.rowHeight}
+            this.floor =  this.gameHeight - 45 - (1+this.lane)*this.rowHeight}
     }
     update(){
         if (this.invulnTime>0){this.invulnTime--}; 
@@ -200,7 +201,7 @@ export default class Player {
             this.gravityTime = 1; 
             if (!this.attackAnim.includes(this.state)) this.state = 'stand';
         } 
-        this.hitbox = [this.position.x, this.position.y, this.width, this.height]; 
+        this.hitbox = [this.position.x+15, this.position.y, this.width, this.height]; 
 
 
 

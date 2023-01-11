@@ -6,49 +6,62 @@ export default class Upgrade{
         this.width =  650;
         this.height = 230; // game.gameHeight - 3*90;
         this.x = (game.gameWidth-this.width)/2; 
-        this.y = 0;//(this.height)
+        this.y = 3;//(this.height)
         this.display = false; 
         this.padding = 15; 
-        this.paddingY = 5;
-        this.buttonWidth = 150;
-        this.buttonHeight = 30;
-        this.font = "12px arial";              
-        this.font2 = "16px arial";  
+        this.paddingY = 4;
+        this.buttonWidth = 165;
+        this.buttonHeight = 36;
+        this.font = "13px arial";              
+        this.font2 = "14px arial";  
 
         this.button1 = document.createElement('button');
         this.button1.textContent = 'Summon Red Dragon';
+        this.button1.value = 'redDragon';
         this.button2 = document.createElement('button');
         this.button2.textContent = 'Summon Blue Dragon';
+        this.button2.value = 'blueDragon';
         this.button3 = document.createElement('button');
         this.button3.textContent = 'Summon Green Dragon';
+        this.button3.value = 'greenDragon';
         this.button4 = document.createElement('button');
-        this.button4.textContent = 'Summon M. Knight';
+        this.button4.textContent = 'Summon Black Dragon';
+        this.button4.value = 'blackDragon';
+        this.button10 = document.createElement('button');
+        this.button10.textContent = 'Summon M. Knight';
+        this.button10.value = 'mushroomKnight';
         this.buttonX1 = this.x + this.padding; 
+        this.nameHash = {'redDragon':'Red Dragon', 'blueDragon':'Blue Dragon',
+        'greenDragon':'Green Dragon', 'blackDragon':'Black Dragon', 'mushroomKnight': 'Mushroom Knight'};
+        this.summonList = ['redDragon', 'blueDragon','greenDragon','blackDragon','mushroomKnight'];
+        this.elementList = ['Blaze','Dawn','Night','Wind','Thunder'];
 
         this.button5 = document.createElement('button');
         this.button5.textContent = 'Blaze Sprite'; //Blaze - Flame 
+        this.button5.value = "Blaze";
         this.button6 = document.createElement('button');
         this.button6.textContent = 'Dawn Sprite '; //Dawn - Light 
+        this.button6.value = "Dawn";
         this.button7 = document.createElement('button'); 
         this.button7.textContent = 'Night Sprite'; //Night - Dark
+        this.button7.value = "Night";
         this.button8 = document.createElement('button');
         this.button8.textContent = 'Wind Sprite ';  //Wind - Storm
+        this.button8.value = "Wind";
         this.button9 = document.createElement('button'); 
         this.button9.textContent = 'Thunder Sprite'; //Thunder - Lightning       
-
+        this.button9.value = "Thunder"; 
         this.buttonX2 =  this.buttonX1 + this.buttonWidth+ this.padding ; 
-
-        this.buttonNext = document.createElement('button');
-        this.buttonNext.textContent = 'Next Wave!';
-        
-
-        this.buttonPositions = [ [this.buttonX1, 0], [this.buttonX1,1], [this.buttonX1,2], [this.buttonX1,3], 
+        this.buttonPositions = [ [this.buttonX1, 0], [this.buttonX1,1], [this.buttonX1,2], [this.buttonX1,3],  [this.buttonX1,4], 
                  [this.buttonX2,0], [this.buttonX2,1], [this.buttonX2,2], [this.buttonX2,3], [this.buttonX2,4]  ]; 
-        this.buttonsList = [this.button1, this.button2, this.button3, this.button4,
+        this.buttonsList = [this.button1, this.button2, this.button3, this.button4, this.button10,
                     this.button5, this.button6, this.button7, this.button8, this.button9]; 
-
-        this.buttonPositions.push([this.width - 25, 5]);
-        this.buttonsList.push(this.buttonNext); 
+       this.note = "Press [J] to buy, [P] to close menu"; 
+       
+       // this.buttonNext = document.createElement('button');
+        // this.buttonNext.textContent = 'Next Wave!';
+        // this.buttonPositions.push([this.width - 25, 5]);
+        // this.buttonsList.push(this.buttonNext); 
 
         this.costText = [ ['', 'Upgrade Shop', '',],
                         ['#', ' Summon', 'Element'],
@@ -58,11 +71,17 @@ export default class Upgrade{
                         ['4', '320', '400'],
                         ['5+', '640', '800']];
 
-        this.costPosition = this.buttonX2 + this.buttonWidth+ 3*this.padding; 
+        this.costPosition = this.buttonX2 + this.buttonWidth+ 2.5*this.padding; 
         this.costHeight = 20; 
         this.costWidth = 275; 
         this.costPadding = 4; 
 
+        this.selectionX = 1;
+        this.selectionY = 1;
+        this.descriptionText = [];
+        this.purchaseDescription = require('./purchase.json'); 
+
+        
     }
 
     initialize(game){
@@ -83,21 +102,32 @@ export default class Upgrade{
        }
     }
 
-    upgradeFunctions(game, i){
-        if (i==0) return game.createMob(game.player, 'redDragon', 0);
-        else if (i==1) return game.createMob(game.player, 'blueDragon', 0);
-        else if (i==2) return game.createMob(game.player, 'greenDragon', 0);
-        else if (i==3) return game.createMob(game.player, 'blackDragon', 0);
-        else if (i==4) return game.addElement('Blaze');
-        else if (i==5) return game.addElement('Dawn');
-        else if (i==6) return game.addElement('Night');
-        else if (i==7) return game.addElement('Wind');
-        else if (i==8) return game.addElement('Thunder');
+    upgradeFunctions(game, button){
+        //resummon;
+        if (game.storage.find(obj=> (obj.type === button.value))){
+            game.resummon(button.value);
+            let unit = game.playerObjects.find(obj=> (obj.type === button.value));
+            button.textContent =  'Upgrade '+this.nameHash[button.value]+ ' (Lvl '+unit.level+')';
+        }
+        else if (game.playerObjects.find(obj=> (obj.type === button.value))){ //upgrade summons 
+            let unit = game.playerObjects.find(obj=> (obj.type === button.value));
+            unit.levelUp(game.player); //add cost 
+            console.log(unit.level);
             
-        //last button
-        else return game.nextWave = true;  
+            if (unit.level<5){
+            button.textContent =  'Upgrade '+this.nameHash[button.value]+ ' (Lvl '+unit.level+')';}
+            else {button.textContent =  this.nameHash[button.value]+ ' (Lvl '+unit.level+')' }
+        } 
 
-
+        else if (this.summonList.includes(button.value)){
+            game.createMob(game.player, button.value, 0); //summons ;
+            if (game.playerObjects.find(obj=> (obj.type === button.value))){ //checks if created successfully 
+                button.textContent = 'Upgrade '+this.nameHash[button.value]+ ' (Lvl 1)';
+            }}
+        else if (this.elementList.includes(button.value)){
+                game.addElement(button.value); //elements
+            }   
+        else if (button.textContent=='Next Wave!') game.nextWave = true; //next wave button
 
     }
 
@@ -114,7 +144,7 @@ export default class Upgrade{
             
             if (this.display && ctx.isPointInPath(x,y)) { //button click (only when displayed)
                 this.buttonsList[i].focus(); 
-                this.upgradeFunctions(game, i); 
+                this.upgradeFunctions(game, this.buttonsList[i]); 
             }
         }
     
@@ -124,29 +154,56 @@ export default class Upgrade{
     drawButton(e1, x, y, ctx, game){   
         let buttonColor ='steelblue';
         let textColor ='white';
+        let cost = 0; 
         if (game){
-            if (this.buttonX1==x) {
-                if (game.player.money< game.player.summonCost[game.player.summonCount]){
+            if (this.buttonX1==x) { //summon buttons //check cost (if first or upgrade)
+                if (game.playerObjects.find(obj=> (obj.type === e1.value))){
+                    let unit = game.playerObjects.find(obj=> (obj.type === e1.value));
+                    cost = game.player.upgradeCost[unit.level];
+                }
+                else ( cost = game.player.summonCost[game.player.summonCount]);
+               
+                if (game.player.money< cost){
+                    
                     buttonColor = 'lightgrey';
                     textColor = 'darkgrey'; 
                 }
             }
-            else if (this.buttonX2==x){
-                if (game.player.money<game.player.elementCost[game.player.elementList.length]){
+            else if (this.buttonX2==x){ //elements
+                cost = game.player.elementCost[game.player.elementList.length];
+                if (game.player.money<game.player.elementCost[game.player.elementList.length] || 
+                    game.player.elementList.length >=5){
                     buttonColor = 'lightgrey';
                     textColor = 'darkgrey'; 
                     }
-                // else{console.log(game.player.elementCost[game.player.elementList.length])}
                 }    
             }
-
+            
         ctx.fillStyle = buttonColor;  //button background
-        ctx.fillRect(x,y,this.buttonWidth, this.buttonHeight); 
+        ctx.beginPath();
+        ctx.strokeStyle = 'white';
+        ctx.roundRect(x,y,this.buttonWidth, this.buttonHeight, 3); 
+        ctx.stroke();
+        ctx.fill();
+       
         ctx.font =  this.font; 
-        
         ctx.textAlign = 'center'; //button text 
         ctx.fillStyle = textColor;
-        ctx.fillText(e1.textContent, x+this.buttonWidth/2, y+this.buttonHeight/2); 
+        if (game){
+             if (game.storage.length>0){
+
+                let test = game.storage.find(obj=> obj.type==e1.value); 
+                if (test){ 
+                    e1.textContent = 'Resummon Lvl '+test.level+' '+this.nameHash[e1.value]; 
+                    cost = 0; 
+                }
+            }
+            }
+
+        ctx.fillText(e1.textContent, x+this.buttonWidth/2, y+this.buttonHeight/3); 
+        if (cost){
+            ctx.fillText('('+cost+' mesos)', x+this.buttonWidth/2, y+2*this.buttonHeight/3);}
+        //else { ctx.fillText('MAX', x+this.buttonWidth/2, y+2*this.buttonHeight/3);}
 
         ctx.beginPath(); //collision path 
         ctx.rect(x,y, this.buttonWidth, this.buttonHeight); 
@@ -157,24 +214,64 @@ export default class Upgrade{
         this.display = !this.display; 
     }
 
+    purchase(game){
+        let i = (this.selectionX-1)*5 + (this.selectionY-1);
+        this.upgradeFunctions(game, this.buttonsList[i]); 
+    }
+
+    selectedDescrip(){
+        let i = (this.selectionX-1)*5 + (this.selectionY-1);
+        this.descriptionText = this.purchaseDescription[this.buttonsList[i].value]; 
+    }
+
     displayMenu(ctx, game){ //upgrade window background
         if (this.display){
             ctx.fillStyle = "white";
-            ctx.fillRect(this.x, this.y, this.width, this.height);
+            ctx.strokeStyle = "black";
+            ctx.beginPath();
+            ctx.roundRect(this.x, this.y, this.width, this.height, 3); //white window
+            ctx.stroke();
+            ctx.fill();
             this.redraw(ctx, game); //draw button
 
             ctx.fillStyle = "#282828";
-            ctx.fillRect(this.costPosition-2*this.padding, 2*this.paddingY, 
-                    this.costWidth, this.costHeight*8.5);
+            ctx.beginPath();
+            ctx.roundRect(this.costPosition-2*this.padding, 2*this.paddingY, 
+                    this.costWidth, this.costHeight*8.5, 3);
+            ctx.stroke();
+            ctx.fill();
+
             ctx.fillStyle = 'white';
             ctx.textAlign = 'center'; 
             ctx.font =  this.font2; 
-            for (let i=0; i<this.costText.length; i++){
-                for (let j=0; j<this.costText[i].length; j++){
-                    ctx.fillText(this.costText[i][j], this.costPosition+(this.costWidth/3)*j,
-                        5*this.paddingY+(this.costPadding+this.costHeight)*i,
-                        90); 
-            }}      
+
+            ctx.beginPath();
+            ctx.strokeStyle = "green";
+            ctx.lineWidth = "5"; 
+            ctx.roundRect(this.buttonX1 + (this.selectionX-1)*(this.buttonWidth+ this.padding), 
+                2*this.paddingY+(this.buttonHeight+this.paddingY)*(this.selectionY-1), 
+                this.buttonWidth,this.buttonHeight, 3);
+            ctx.stroke();
+
+            this.selectedDescrip(); //
+            ctx.font =  this.font2; 
+            ctx.textAlign = 'left';
+            for (let i=0; i<this.descriptionText.length; i++){
+                ctx.fillText(this.descriptionText[i], this.costPosition-25,
+                6*this.paddingY+(this.costPadding+this.costHeight)*i); 
+            }
+                
+            // for (let i=0; i<this.costText.length; i++){
+            //     for (let j=0; j<this.costText[i].length; j++){
+            //         ctx.fillText(this.costText[i][j], this.costPosition+(this.costWidth/3)*j,
+            //             5*this.paddingY+(this.costPadding+this.costHeight)*i,
+            //             90); 
+            // }}      
+
+            ctx.textAlign = 'left';
+            ctx.font =  this.font2; 
+            ctx.fillStyle= 'black';
+            ctx.fillText(this.note, this.buttonX1+10, this.height-10);
 
         }
         else {document.getElementById('menu').innerHTML="";}

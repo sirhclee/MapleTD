@@ -1,0 +1,42 @@
+{
+    "redDragon":["Summons a Red Dragon to spit hot fire", "",
+                 "Level up increases explosion area"
+                ],
+    "blueDragon":["Summons a Blue Dragon to spew frost", "",
+                "Level up increases projectile pierce amount"
+               ],
+    "greenDragon":["Summons a Green Dragon to spread poison", "",
+               "Level up increases projectile spread"
+              ],
+    "blackDragon":["Summons a Black Dragon to shoot bolts", "",
+              "Level up increases knockback force"
+             ],
+    "mushroomKnight":["Summons a Mushroom Knight to stall", "",
+             "Level up increases stall duration"
+            ],
+    "Blaze": ["Summons Elemental: Blaze", "",
+            "Adds burning projectiles to attacks",
+            "Additional sprites further increase bonus"
+        ],
+    "Dawn": ["Summons Elemental: Dawn", "",
+            "Adds explosive projectiles to attacks",
+            "Additional sprites further increase bonus"
+        ],    
+    "Night": ["Summons Elemental: Night", "",
+        "Increases movement speed",
+        "Adds projectile that increases damage taken",
+        "Additional sprites further increase bonus"
+        ], 
+    "Wind": ["Summons Elemental: Wind", "",
+        "Increases movement speed",
+        "Adds projectiles with knockback to attacks",
+        "Additional sprites further increase bonus"
+        ],
+    "Thunder": ["Summons Elemental: Dawn", "",
+        "Adds piercing projectiles to attacks",
+        "Additional sprites further increase bonus"
+         ]
+
+
+        
+}

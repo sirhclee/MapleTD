@@ -9,15 +9,15 @@ export default class Mob{
         
         this.gameWidth = game.gameWidth;
         this.gameHeight = game.gameHeight;
-        this.width = 50; //sprite size 
-        this.height = 80; 
+
         this.type = type; 
          
         this.value = this.typeInfo[this.type]['value']; 
         this.lootDrop = false; 
         this.projectiles = [];
         this.speed = 1;
-        this.upgrade = 0; 
+        this.level = 1; 
+        this.fade = 1; 
         
         this.alive = true;  
         this.invulnTime =  0; 
@@ -35,26 +35,34 @@ export default class Mob{
         this.gravityTime = 1;
         this.lane = game.lane;  // which lane
         if (this.side == 1){ //Enemy Mob 
+            this.width = 50; //sprite size 
+            this.height = 80; 
             this.range = 50;
             this.left = true;
             this.health = this.typeInfo[this.type]['health'];
             this.maxHealth = this.health; 
             this.armor = 0;
             this.state = 'walk';
+            this.xOff=-70;
+            this.yOff=-95;
             this.position = {  //position (rightside)
-                x: this.gameWidth-130, 
+                x: this.gameWidth-100, 
                 y: this.gameHeight - 95 - 90*game.lane,
             }
         }
         else { // PC pets
+            this.width = 50; //sprite size 
+            this.height = 50; 
             this.range = 550;
             this.health = 1; 
             this.armor = 1; 
             this.state = 'stand'
             this.left = false; 
+            this.yOff=0;
+            this.xOff=0;
             this.position = {  //position 
             x: (game.curTile*80)+game.width/2, 
-            y: game.position.y
+            y: game.floor+30
         }};  //offset for sprites 
         //if (this.typeInfo[this.type]['yOff']) (this.position.y -=this.typeInfo[this.type]['yOff']) ;
         if (this.typeInfo[this.type]['damage']){
@@ -64,9 +72,7 @@ export default class Mob{
         else {this.damage=1; this.aggro=false};
 
         if (this.typeInfo[this.type]['yOff']){this.yOff = this.typeInfo[this.type]['yOff']}
-        else (this.yOff=0);
         if (this.typeInfo[this.type]['xOff']){this.xOff = this.typeInfo[this.type]['xOff']}
-        else (this.xOff=0);
         
         this.knockbackThresh = Math.floor(this.maxHealth / 10);
         this.knockbackSum = 0  
@@ -80,7 +86,7 @@ export default class Mob{
             this.stand = new SpriteAnimation(this.type+'/stand_?.png', this.typeInfo[this.type]['stand'], 10, "stand"); //standing sprites; 
             this.walk = new SpriteAnimation(this.type+'/move_?.png', this.typeInfo[this.type]['walk'], 10, "walk"); //walking sprites; 
             this.hit = new SpriteAnimation(this.type+'/hit1_?.png',0, 10, "hit");
-            this.die = new SpriteAnimation(this.type+'/die1_?.png', this.typeInfo[this.type]['die'], 10, "die", true);
+            this.die = new SpriteAnimation(this.type+'/die1_?.png', this.typeInfo[this.type]['die'], 15, "die", true);
             this.animations = [this.stand, this.walk, this.hit, this.die]; 
             if (this.typeInfo[this.type]['angry']){
                 this.angry = new SpriteAnimation(this.type+'/attack1_?.png', this.typeInfo[this.type]['angry'], 10, "attack", true)
@@ -94,12 +100,28 @@ export default class Mob{
         }
     }
     
+    levelUp(player){ 
+        let cost = player.upgradeCost[this.level-1];
+        if (player.money>=cost){
+            this.level++;  
+            this.value += cost; 
+            player.money -= cost; 
+        }
+        //this.damage*=2; 
+    }
+
     attack(){
         this.speedX = 0; 
         if (this.attackCD <= 0){
             if (this.side == 0){
                 this.proj = new Projectile(this, this.typeInfo[this.type]['proj']);
                 this.projectiles.push(this.proj);
+                if (this.level>1){
+                    for (let i=0; i<=this.level; i++){
+                    //this.proj = new Projectile(this, this.typeInfo[this.type]['proj']);
+                    setTimeout( ()=> {this.projectiles.push( new Projectile(this, this.typeInfo[this.type]['proj']));}, 80*i)
+                    }
+                }
             }
             this.angry.reset();
             this.state = 'attack'; 
@@ -117,7 +139,9 @@ export default class Mob{
         if (this.health<=0 && this.side ==1){
             this.state = 'die';  //death animation   
             if (animation.shouldStop()){
-                 this.alive = false;} 
+                if (this.fade>0) this.fade -= 0.03; //fade on death 
+                ctx.globalAlpha = this.fade; 
+                setTimeout(()=> {this.alive = false}, "450") ;} 
         }  
         if (this.side == 1 && this.state !='die'){ //health bar
             ctx.fillStyle = "#2b2b2b";
@@ -130,6 +154,7 @@ export default class Mob{
             ctx.scale(-1,1);
             ctx.drawImage(image, -this.position.x-this.width+this.xOff, this.position.y+this.yOff );}
         else {ctx.drawImage(image, this.position.x+this.xOff, this.position.y+this.yOff); }
+        ctx.globalAlpha = 1;
         ctx.setTransform(1,0,0,1,0,0); 
         this.projectiles.forEach( (object)=>object.draw(ctx) )
         }            
@@ -145,10 +170,10 @@ export default class Mob{
                 if (this.position.x>this.gameWidth-this.width) {this.position.x = this.gameWidth-this.width;} //right border
                 //console.log(this.knockbackForce);
                 if (Math.abs(this.knockbackForce)>0) {this.state = 'hit'}; 
-                if (this.knockbackForce>0){this.knockbackForce-=1;}
-                else if (this.knockbackForce<0){this.knockbackForce+=1;}
-                    
-                this.position.x -= (this.speedX);//-this.knockbackForce); //knockback right
+                if (this.knockbackForce>0){this.knockbackForce-=0.5;}
+                else if (this.knockbackForce<0){this.knockbackForce+=0.5;}
+                this.position.x += this.knockbackForce;
+                this.position.x -= (this.speedX); //knockback right
 
                 this.position.y -= this.speedY; 
                 if (this.speedY>0){

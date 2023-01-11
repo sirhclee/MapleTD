@@ -10,11 +10,12 @@ const gameHeight = 500;
 let game = new Game(gameWidth, gameHeight)
 game.start(); //creates game objects; 
 let lastTime = 0 ; //initialize time
+// setTimeout(()=> {game.fadeOut = true}, "3000")
 
 function gameLoop(timestamp){
-    let deltaTime = timestamp - lastTime; 
-    lastTime = timestamp; 
-    ctx.clearRect(0,0, gameWidth, gameHeight);
+    //let deltaTime = timestamp - lastTime; 
+    ///lastTime = timestamp; 
+    ctx.clearRect(0,0, gameWidth, gameHeight); //refresh screen
     //console.log(timestamp);
     game.update(timestamp);
     game.nextWaveLoader(timestamp); //loads wave list
@@ -23,8 +24,10 @@ function gameLoop(timestamp){
     game.draw(ctx); 
     game.upgradeMenu(ctx)
     game.waveClear();
- 
+    game.nextLevelLoader();
     
+    game.screenTransition(ctx);
+       
     
 
     requestAnimationFrame(gameLoop); 
