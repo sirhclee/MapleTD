@@ -1,20 +1,22 @@
-
 export default class startScreen{
     constructor(game){
         this.gameWidth = game.gameWidth;
         this.gameHeight = game.gameHeight;
         this.width =  600;
-        this.height = 170; // game.gameHeight - 3*90; 
+        this.height = 120; // game.gameHeight - 3*90; 
         this.x = (game.gameWidth-this.width)/2; 
         this.y = 3;//(this.height)
-        this.padding = 25; 
+        this.padding = 15; 
         this.font = "16px arial";
         this.font2 = "24px arial";
+        this.font3 = "20px arial";
         this.display = true; 
         this.controls = ["Stop the monsters from advancing!"," - Use (WASD) to move, (J) to jump, and (K) to shoot. Use (P) to open shop. ", 
             " - Collect the coins monsters drop before they expire", 
             " - Spend mesos on upgrades & summons to bolster your defense", 
-            " - Lose lives when monsters escape or touch you", " - Game over when all lives lost!"]
+            " - Lose lives when monsters escape or touch you", " - Game over when all lives lost!"];
+        this.keyboard = new Image(); 
+        this.keyboard.src = 'images/bg/keyboard.png';
         this.button1 = document.createElement('button');
         this.button1.textContent = 'Start!';
         this.buttonX1 = this.gameWidth/2;
@@ -43,6 +45,7 @@ export default class startScreen{
             this.display = false; 
         }
 
+
         handleClick(e, game){
             const canvas = document.getElementById('gameScreen');
             let ctx = canvas.getContext('2d'); 
@@ -56,7 +59,6 @@ export default class startScreen{
                 }
             }      
         }
-
 
         drawButton(e1, x, y, ctx){   
             ctx.fillStyle = 'steelblue'; //draw border
@@ -73,14 +75,39 @@ export default class startScreen{
 
      
         displayMenu(ctx, game){ //upgrade window background
-            if (this.display || game.waveFinish){
-                ctx.font = this.font2; 
+            if (this.display || game.waveFinish || game.levelFinish){
+                ctx.fillStyle = "white";
+                ctx.strokeStyle = "black";
+                ctx.lineWidth = "5"; 
+                ctx.beginPath();
+                ctx.roundRect(this.x+0.3*this.width, this.height+20, 0.4*this.width, 25, 2);
+                ctx.stroke();
+                ctx.fill();
+
+                ctx.font = this.font; 
+                ctx.fillStyle = 'black';
                 ctx.textAlign = 'center'; 
-                ctx.fillText('Press [P] to resummon allies', this.gameWidth/2, this.height-5) 
-                ctx.fillText('Press [O] to start wave', this.gameWidth/2, this.height + 25) 
+                ctx.fillText('Press [A] for upgrades', this.gameWidth/2, this.height+35) 
             }
 
-            if (this.display){
+            if (game.levelNote!=''){
+                if (game.gameTimeReal - game.noteTime<4500){
+                    ctx.fillStyle = "white";
+                    ctx.strokeStyle = "black";
+                    ctx.lineWidth = "5"; 
+                    ctx.beginPath();
+                    ctx.roundRect(this.x+15, this.height*0.5, this.width-30, 50, 2);
+                    ctx.stroke();
+                    ctx.fill();
+
+                    ctx.font = this.font3; 
+                    ctx.fillStyle = 'black';
+                    ctx.textAlign = 'center'; 
+                    ctx.fillText(game.levelNote, this.gameWidth/2, this.height/2+30);
+                }
+            }
+
+            if (this.display || (game.pause && !game.upgrade.diplay)){
                 ctx.fillStyle = "white";
                 ctx.strokeStyle = "black";
                 ctx.lineWidth = "5"; 
@@ -91,13 +118,26 @@ export default class startScreen{
                 ctx.fillStyle = 'black';
                 ctx.textAlign = 'start'; 
                 ctx.font = this.font;
-                for (let i=0; i<this.controls.length; i++){
-                    ctx.fillText(this.controls[i], this.x+this.padding, this.y+this.padding*(1+i), this.width); 
-                }
+                ctx.drawImage(this.keyboard, 180,0);
+                // for (let i=0; i<this.controls.length; i++){
+                    
+                //     ctx.fillText(this.controls[i], this.x+this.padding, this.y+this.padding*(1+i), this.width); 
+                // }
                 // this.redraw(ctx); //draw start button
                 //
             }   
-
+            // if (game.storage.length>0){
+            //     ctx.fillStyle = "white";
+            //     ctx.strokeStyle = "black";
+            //     ctx.beginPath();
+            //     ctx.roundRect(this.x, this.y, this.width, this.height, 2);
+            //     ctx.stroke();
+            //     ctx.fill();
+            //     ctx.fillStyle = 'black';
+            //     ctx.textAlign = 'start'; 
+            //     ctx.font = this.font2;
+            //     ctx.fillText('Resummon Dragons from shop!', this.x+this.padding, this.y+this.padding) 
+            // }
             // else {document.getElementById('start').innerHTML="";}
             
     

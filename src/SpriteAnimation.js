@@ -23,16 +23,20 @@ export default class SpriteAnimation{
         this.imageIndex = 0;   
     }
 
-    getImage(){  //returns frame
-        this.setImageIndex(); 
+    getFrame(){
+        return this.imageIndex; 
+    }
+
+    getImage(pause){  //returns frame
+        this.setImageIndex(pause); 
         return this.images[this.imageIndex]; 
     }
 
-    setImageIndex(){
+    setImageIndex(pause){
         this.timerCount--;
         if (this.timerCount <= 0 && !this.shouldStop()){
             this.timerCount= this.timerCountDefault; 
-            this.imageIndex++; 
+            if (!pause) {this.imageIndex++;} //animate only when unpaused
             if (this.imageIndex >= this.images.length){
                 this.imageIndex = 0; 
             }

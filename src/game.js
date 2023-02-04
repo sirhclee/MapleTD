@@ -4,98 +4,220 @@ import Mob from './mob';
 import Upgrade from './upgrade'; 
 import Money from './money'; 
 import startScreen from './startScreen'; 
+import titleScreen from './titleScreen'; 
+import restartScreen from './restartScreen'; 
+import endScreen from './endScreen'; 
 import HUD from './HUD'; 
 import img from './img';
 
 export default class Game{
     constructor(gameWidth, gameHeight){
+        this.note = true;
         this.gameWidth = gameWidth;
         this.gameHeight = gameHeight;
+        this.title = new titleScreen(this); 
+        this.title.initialize(this);
+        this.end = new endScreen(this); 
+        this.end.initialize(this);
+        this.restart = new restartScreen(this); 
+        this.restart.initialize(this);
+        this.gameOver = false; 
+        this.restartWindow = false;
+        this.titleDisplay = false;//false; //enable for release
         this.load = false;
         this.playerObjects =[];
         this.mobObjects =[]; 
         this.moneyObjects = []; 
-        this.level = 1; 
+        this.level = 2;
+        this.finalLevel =3 ; 
         this.wave = 0; 
         this.lane = 1; 
         this.bgSky = img('bg/bgSky'+this.level+'.png');
         this.bgStage = img('bg/bgStage'+this.level+'.png');
         this.waveStart = false;
         this.waveInfo = require('./waveInfo.json');
-        this.levelList = this.waveInfo['level'+this.level];//{1: ['wave1-5', 'wave1-1']} //JSON
+        this.waveNotes = require('./waveNotes.json');
+        this.levelNote = ''; 
+        this.levelList = [...this.waveInfo['level'+this.level]];//{1: ['wave1-5', 'wave1-1']} //JSON
         this.waveList = [];
         this.toLoad =[]; 
-        this.rowHeight = 90; 
+        this.rowHeight = 90; //lane size
         this.nextWave = false; 
+        this.levelStart = false;
         this.waveFinish = true; 
-        this.gameTime = 0; 
-        this.fade = 1;
-        this.fadeIn = true;
+        this.levelFinish = false ; //close stats menu
+        
+        this.noteTime = 0; 
+        this.gameTime = 0; //played game time for events; 
+        this.gameTimeReal = 0; //tracks time against pauses 
+        this.pausedTime = 0; 
+        this.timeOffset = 0
+        this.timeOffsetSum = 0; 
+        this.setPoint = false; 
+
+        this.fade = 0;
+        this.fadeIn = false;
         this.fadeOut = false ;
         this.storage = []; 
+        this.error = false; 
+        this.mobCount = 0 ; 
+
+        this.poisonDamage = 0; 
+        this.monsterKill = 0; 
+        this.monsterEscape = 0;
+        this.damageDealt = {}; 
+        this.moneyCollected = 0;
+        this.moneyLost = 0; 
+        this.pause = false; 
+        this.recallStorage=false;
+
     }
 
-    waveClear(){ // checks if wave is cleared
-        if (!this.nextWave && this.waveStart && 
+    pauseHandler(time, ctx){
+
+        if (this.pause ){ //snaps when time is paused; 
+            if (!this.setPoint){
+                this.pausedTime = time;
+                this.setPoint = true; 
+            }
+            else {this.timeOffset = time - this.pausedTime} //runs up offset value 
+        }
+        else 
+            {
+            this.upgrade.display = false ;
+            this.timeOffsetSum+= this.timeOffset; //sum of offset values 
+            this.timeOffset = 0;  //reset 
+            this.gameTimeReal = time -this.timeOffsetSum; //apply offset sum
+            this.setPoint = false;        
+        }
+
+        if (this.pause){
+            ctx.globalAlpha = 0.6
+            ctx.fillStyle = "black";
+            ctx.fillRect(0,0,this.gameWidth, this.gameHeight); 
+            ctx.globalAlpha = 1;
+
+            if (!this.upgrade.display){
+                ctx.font = "16px arial"; 
+                ctx.fillStyle = 'white';
+                ctx.textAlign = 'center'; 
+                ctx.fillText('Press ESC to unpause', this.gameWidth/2, this.gameHeight/2+20) 
+            }
+        }
+    }
+
+    togglePause(){   
+        this.pause = !this.pause; 
+    }
+
+    resetEverything(){
+        this.gameOver = false; 
+        this.restartWindow = false;
+        this.titleDisplay = false; //enable for release
+        this.moneyObjects = []; 
+        this.wave = 0; 
+        this.bgSky = img('bg/bgSky'+this.level+'.png');
+        this.bgStage = img('bg/bgStage'+this.level+'.png');
+        this.waveStart = false;
+        this.waveInfo = require('./waveInfo.json');
+        this.levelList = [...this.waveInfo['level'+this.level]];//{1: ['wave1-5', 'wave1-1']} //JSON
+
+        this.waveList = [];
+        this.toLoad =[]; 
+        this.nextWave = false; 
+        this.waveFinish = true; 
+        this.levelFinish = false ; //close stats menu
+        //this.gameTime = 0; 
+        this.storage = []; 
+        this.poisonDamage = 0; 
+        this.monsterKill = 0; 
+        this.monsterEscape = 0;
+        this.damageDealt = {}; 
+        this.moneyCollected = 0;
+        this.moneyLost = 0; 
+        this.recallStorage=false;
+        this.loadBG();
+        this.playerObjects = [this.player];
+    }
+    
+    titleMenu(ctx){ 
+        this.title.displayMenu(ctx, this); 
+    }
+
+    waveClear(ctx){ // checks if wave is cleared
+        if (!this.nextWave && this.waveStart && this.levelStart && 
             this.toLoad.length == 0  && this.mobObjects.length==0 ){
-            //this.upgrade.display = true; 
             this.waveFinish = true; 
-            //this.upgrade.displayMenu(ctx);
+            this.end.display = true;
+            this.end.displayMenu(ctx, this);
         } 
     }
-    nextLevelLoader(){
+    nextLevelLoader(ctx){
         if (this.levelList.length == 0 && this.waveFinish){
-            //special level clear banner
-
-            this.waveStart = false;
-            this.waveFinish = false; 
-            setTimeout(()=> {
-                this.fadeOut = true}, "2000") // fade out transition
-            setTimeout(()=> { //load next content
-                this.level++;
-                this.levelList = this.waveInfo['level'+this.level]; // load next level waves
-                this.wave = 0;                 
-                this.bgSky = img('bg/bgSky'+this.level+'.png'); //reload BG art 
-                this.bgStage = img('bg/bgStage'+this.level+'.png');
-                this.moneyObjects = []; //clear floor money 
-                this.waveStart = true; 
-                this.player.position = {x:25, y:this.gameHeight-45-2*this.rowHeight};
-                this.player.left = false;
-                this.player.floor =  this.gameHeight - 45 - 2*this.rowHeight
-                this.storage = this.playerObjects.splice(1);  //pushes everything expect player
-                //for (let i=1; i<this.playerObjects.length;i++ ){
-                //     this.player.money += this.playerObjects[i].value; //refund value
-                //     this.playerObjects[i] = null; 
-                //}
-                //this.//refunds player
-                
-            }, "4000"); 
+            if (this.levelFinish){
+                if (this.level==this.finalLevel){ 
+                    this.gameOver = true; 
+                }
+                else {
+                this.waveStart = false;
+                this.waveFinish = false; 
+                setTimeout(()=> {
+                    this.fadeOut = true}, "2000") // fade out transition
+                setTimeout(()=> { //load next content
+                    this.level++;
+                    this.levelList = [...this.waveInfo['level'+this.level]]; // load next level waves
+                    this.levelFinish = false;
+                    this.wave = 0;                 
+                    this.bgSky = img('bg/bgSky'+this.level+'.png'); //reload BG art 
+                    this.bgStage = img('bg/bgStage'+this.level+'.png');
+                    this.moneyObjects = []; //clear floor money 
+                    this.waveStart = false; 
+                    this.waveFinish = true;
+                    this.nextWave  = false 
+                    
+                    this.player.left = false;
+                    this.player.lane = 1;
+                    this.player.position = {x:25, y:this.gameHeight - 45 - 2*this.player.rowHeight};
+                    this.player.floor = this.gameHeight - 45 - (1+this.player.lane)*this.player.rowHeight;
+                    this.storage = this.playerObjects.splice(1);  //pulls everything expect player
+                }, "4000"); 
+            }
+        }
 
         }
     }
 
-    nextWaveLoader(time ){
+    nextWaveLoader(){
         if (this.nextWave){ //load next wave data from JSON
-            this.waveList = this.waveInfo[this.levelList.shift()]; //
-            this.gameTime = time; //update time 
-            this.waveStart = false; 
-            this.wave ++; 
-            this.nextWave = false; 
-            this.upgrade.display = false;
-            this.waveFinish = false; 
+            if (this.levelList.length>0){
+                this.waveList = [...this.waveInfo[this.levelList.shift()]]; //
+                this.gameTime = this.gameTimeReal; //start of wave;
+                this.waveStart = false; 
+                this.wave ++; 
+                this.nextWave = false; 
+                this.upgrade.display = false;
+                this.waveFinish = false; 
+
+
+                if (this.waveNotes['wave'+this.level+'-'+this.wave]){
+                    this.levelNote = this.waveNotes['wave'+this.level+'-'+this.wave];
+                    this.noteTime = this.gameTimeReal; 
+                }
+            }
+            else this.levelFinish = true;
         }
     }
 
     screenTransition(ctx){
         if (this.fadeIn){ //fade in 
             if (this.fade>0){
-                this.fade -= 0.02; 
+                this.fade -= 0.03; 
                 if (this.fade <= 0) {this.fadeIn = false;}
             } 
         }
         if (this.fadeOut){ //fade to black
             if (this.fade < 1){    
-                this.fade += 0.02; 
+                this.fade += 0.03; 
                 if (this.fade >= 1) { 
                     setTimeout(()=> {
                         this.fadeIn = true;
@@ -110,31 +232,40 @@ export default class Game{
         }
 
     }
-    waveLoader(time){//loads each mob from waveList
-        if (this.toLoad.length == 0 && this.waveList.length>0) this.toLoad = this.waveList.shift(); 
-        if (this.toLoad[2] <=  (time - this.gameTime)/1000 ){
+    waveLoader(){//loadds each mob from waveList
+        if (this.toLoad.length == 0 && this.waveList.length>0) {this.toLoad = this.waveList.shift();}
+        if (this.toLoad[2] <=  (this.gameTimeReal - this.gameTime)/1000 ){
             this.waveStart = true; 
-            if (this.toLoad[1].length>0){
+            this.levelStart = true;
+            if (this.toLoad[1].length>0){ //multiple entries 
                 for (let i=0; i<this.toLoad[1].length; i++){
                     this.lane = this.toLoad[1][i]; //sets lane to load
-                    this.createMob(this, this.toLoad[0], 1);}
+                    this.createMob(this, this.toLoad[0], 1);
+                    this.mobCount ++; }
                 }
             
             else{
                 this.lane = this.toLoad[1]-1; //sets lane to load
-                this.createMob(this, this.toLoad[0], 1);}
-           
+                this.createMob(this, this.toLoad[0], 1);
+                this.mobCount ++; }           
             this.toLoad = []; 
-        }
+        } 
+
     }    
     
     addElement(element){ //upgrade shop 
        if (this.player.elementList.length<5){
-            if (this.player.money> this.player.elementCost[0]){
+            if (this.player.money> this.player.elementCost[this.player.elementList.length]){
                 this.player.money -= this.player.elementCost[this.player.elementList.length];
                 this.player.elementList.push(element); 
                 this.player.elementals(); //load sprites
-                //this.elementCost.shift();  //delete cost 
+                //apply upgrades
+                if (element == 'Blaze'){this.player.damageMulti+=0.4 }
+                if (element =="Dawn"){this.player.lootMulti+=0.5; this.player.damageMulti+=0.2 };
+                if (element =='Night'){this.player.knockbackMulti+=0.2; this.player.damageMulti+=0.2};
+                if (element =='Wind'){this.player.speedMulti+=0.2};
+                if (element =='Thunder'){this.player.pierce+=1;this.player.damageMulti+=0.2 };
+                
             }
        }
     }
@@ -143,13 +274,66 @@ export default class Game{
         let transfer = this.storage.findIndex(obj=>obj.type === type); 
         this.storage[transfer].position.x = (this.player.curTile*80)+this.player.width/2;
         this.storage[transfer].position.y = (this.player.floor+30); 
+        this.storage[transfer].lane = this.player.lane;
 
-        this.playerObjects.push(this.storage[transfer]); 
-        this.storage[transfer] = '';
-        console.log(this.playerObjects);
-        //console.log(this.storage); 
+        this.playerObjects.push(this.storage[transfer]); //copies object to list
+        this.storage.splice(transfer); //deletes object from storage
     }
-    createMob(parent, type, side){
+    recallCheck(){
+        if (!this.recallStorage  && this.storage[0]){
+            this.recallStorage = this.storage.shift() ;
+        }
+    }
+    recall(){        
+        if (!this.recallStorage){
+            this.recallStorage = this.playerObjects.find(obj=> (obj.position.y-30 === this.player.floor)&&  //checks for existing unit 
+            (obj.position.x === (this.player.curTile*80)+this.player.width/2) && (obj.name!=='Wiz' ))
+
+            if (this.recallStorage)
+            {
+                let type = this.recallStorage.type;
+                this.playerObjects = this.playerObjects.filter(  
+                    function (object){return object.type != type; });    
+            }
+        }
+        else {
+            if (!this.playerObjects.find(obj=> (obj.position.y-30 === this.player.floor) &&  //checks for existing unit 
+            (obj.position.x === (this.player.curTile*80)+this.player.width/2) && (obj.name!=='Wiz'))){
+                    
+                this.recallStorage.position.x = (this.player.curTile*80)+this.player.width/2;
+                this.recallStorage.position.y = (this.player.floor+30); 
+                this.recallStorage.left = (this.player.left); 
+                this.recallStorage.lane = (this.player.lane); 
+
+                this.playerObjects.push(this.recallStorage);
+                this.recallStorage = false;
+            }
+        }
+        
+
+        // if (!this.recallStorage){
+        //     this.recallStorage = this.playerObjects.find(obj=> (obj.position.y-30 === this.player.floor)&&  //checks for existing unit 
+        //     (obj.position.x === (this.player.curTile*80)+this.player.width/2) && (obj.name!=='Wiz' ))
+
+        //     if (this.recallStorage)
+        //     {
+        //         let type = this.recallStorage.type;
+        //         this.playerObjects = this.playerObjects.filter(  //removes looted coins
+        //             function (object){return object.type != type; });    
+        //     }
+        // }
+        // else {
+        //     this.recallStorage.position.x = (this.player.curTile*80)+this.player.width/2;
+        //     this.recallStorage.position.y = (this.player.floor+30); 
+
+        //     this.playerObjects.push(this.recallStorage);
+        //     this.recallStorage = false;
+        // }
+
+
+    }
+
+    createMob(parent, type, side, game = null ){
         if (side === 0){ //Summon unit
             if (!this.playerObjects.find(obj=> (obj.position.y-30 === this.player.floor) &&  //checks for existing unit 
             (obj.position.x === (this.player.curTile*80)+this.player.width/2) && (obj.name!=='Wiz'))){
@@ -164,7 +348,7 @@ export default class Game{
                     }
                 }
                 }
-            else(console.log('occupied')); 
+            else if (game){game.error = true; }; 
 
         } else {this.mobObjects.push(new Mob(parent, type, 1))}
         
@@ -177,41 +361,58 @@ export default class Game{
     start(){
         this.startMenu = new startScreen(this);
         this.startMenu.initialize(this); 
-        this.player = new Player(this);
         this.upgrade = new Upgrade(this); 
         this.upgrade.initialize(this); 
         this.HUDMenu = new HUD(this); 
-        new InputHandler(this.player, this.upgrade, this);        
+        this.player = new Player(this);
         this.playerObjects = [this.player];
+        this.inputHandler = new InputHandler(this.player, this.upgrade, this);        
+
+        this.playerObjects.push(new Mob(this.player, 'redDragon', 0,1,3)); 
+        this.playerObjects.push(new Mob(this.player, 'blueDragon', 0,2,3)); 
+        this.playerObjects.push(new Mob(this.player, 'greenDragon', 0,3,3)); 
+        this.playerObjects.push(new Mob(this.player, 'blackDragon', 0,4,3)); 
+
     }
 
+
+
     draw(ctx){ //runs draw function for object list 
+
         ctx.drawImage(this.bgSky, 0, 0); 
         ctx.drawImage(this.bgStage, 0, 0); 
-        this.mobObjects.forEach( (object)=>object.draw(ctx) )
-        this.playerObjects.forEach( (object)=>object.draw(ctx) )
-        this.moneyObjects.forEach( (object)=>object.draw(ctx) ); 
+        this.startMenu.displayMenu(ctx, this );
+        this.mobObjects.forEach( (object)=>object.draw(ctx, this.pause) )
+        this.playerObjects.forEach( (object)=>object.emote(this)); 
+        this.playerObjects.forEach( (object)=>object.draw(ctx,this.pause) )
+        this.moneyObjects.forEach( (object)=>object.draw(ctx,this.pause) ); 
+        
+        this.player.recallIcon(ctx, this);
     
     } 
 
-    knockback(obj, direction){
+    knockback(obj, direction, multi){
         if (obj.name =='Wiz'){ //only player pops up
             obj.jump = true;
-            obj.invulnTime = 100; 
-            obj.speedY += 4;}
-    
-        obj.hit = true; 
-        obj.knockbackForce = -5*direction; //add as stat
+            obj.invulnTime = 110; 
+            obj.speedY += 4;
+            obj.knockbackForce= -8*direction; }
+        else{
+            obj.hit = true; 
+            obj.knockbackTime = this.gameTimeReal;  //stores when target knockback;
+            obj.knockbackForce = -4*direction*(1+ (multi-1)/4); //add as stat
+        }
     }
     aggro(obj1, obj2){ // checks if obj1 range is within obj2
         for (const target of obj2){
             if (target.health>0){
+                
                 if (obj1.hitbox[0]+obj1.hitbox[2]+obj1.range>target.hitbox[0] && 
                     obj1.hitbox[0]-obj1.range<target.hitbox[0]+target.hitbox[2]){ //aggro from right
-                    
-                        if (obj1.hitbox[1]+obj1.hitbox[3]/2>target.hitbox[1] && obj1.hitbox[1]+obj1.hitbox[3]/2<target.hitbox[1]+target.hitbox[3])
-                         //if (obj1.lane == obj2.lane)   
-                        {if (obj1.aggro){obj1.attack()}; //only aggro mobs have attack animations
+                        if (obj1.hitbox[1]<target.hitbox[1] && obj1.hitbox[1]+obj1.hitbox[3]>target.hitbox[1] ||
+                            obj1.lane == target.lane){
+                         {if (obj1.aggro){obj1.attack()}; //only aggro mobs have attack animations
+                        }
                     }
                 }
             }
@@ -219,109 +420,198 @@ export default class Game{
      }
     
     lootMoney(obj1, obj2){
-        for (const target of obj2){
-            if ( (obj1.hitbox[0]<target.hitbox[0] && obj1.hitbox[0]+obj1.hitbox[2]> target.hitbox[0]) || //obj1 on left
-                (obj1.hitbox[0]+obj1.hitbox[2]>target.hitbox[0]+target.hitbox[2] && 
-                obj1.hitbox[0]<target.hitbox[0]+target.hitbox[2] )){ //obj1 on right
+        for (const target of obj2){ //-(this.width*(-1+this.lootMulti))
+            if ( (obj1.hitbox[0]<target.hitbox[0] && obj1.hitbox[0]+80*(obj1.lootMulti) > target.hitbox[0]) || //obj1 on left
+                (obj1.hitbox[0] > target.hitbox[0]+target.hitbox[2] && obj1.hitbox[0]-80*(obj1.lootMulti-1)<target.hitbox[0]+target.hitbox[2] )){ //obj1 on right
                 if (obj1.hitbox[1]<target.hitbox[1] && obj1.hitbox[1]+obj1.hitbox[3]>target.hitbox[1]){
-                    obj1.money += target.value; 
-                    console.log(obj1.money);
-                    target.delete = true;//true; 
+                    if (!target.startFade){
+                        obj1.money += target.value; 
+                        this.moneyCollected += target.value;
+                        target.startFade = true;//true; 
+                        target.float = true; 
+                    }
             }
-            }}
+            }
+            if (target.lost){ 
+                this.moneyLost+=target.value
+                target.value=0 }; 
+        }
+            
 
         this.moneyObjects = this.moneyObjects.filter(  //removes looted coins
         function (object){return object.delete == false; });     
     }
 
-
-    collision(obj1, obj2){ // checks if obj1 is hitting obj2 
+    explodeDamage(obj1, obj2, obj3){
         for (const target of obj2){
-           //console.log(target);
+            if (target.health>0){
+                if ( (obj1.hitbox[0]<target.hitbox[0] && obj1.hitbox[0]+obj1.hitbox[2]+obj3.area > target.hitbox[0]) || //obj1 ->target
+                    (obj1.hitbox[0]+obj1.hitbox[2]>target.hitbox[0]+target.hitbox[2] && obj1.hitbox[0]-obj3.area<target.hitbox[0]+target.hitbox[2] )){ 
+                        if ((obj1.hitbox[1]>target.hitbox[1] && obj1.hitbox[1]<target.hitbox[1]+target.hitbox[3])||obj3.column>0){
+                            target.health -= obj3.damage; 
+                            obj3.explodeDamageDealt += obj3.damage;
+                        }
+                }
+            }
+        }
+    }
+    
+
+    collision(obj1, obj2, obj3 = null){ // checks if obj1 is hitting obj2 
+        for (const target of obj2){
             if (obj1.health>0 && target.health>0){
                 if ( (obj1.hitbox[0]<target.hitbox[0] && obj1.hitbox[0]+obj1.hitbox[2]> target.hitbox[0]) || //obj1 ->target
                     (obj1.hitbox[0]+obj1.hitbox[2]>target.hitbox[0]+target.hitbox[2] && 
                     obj1.hitbox[0]<target.hitbox[0]+target.hitbox[2] )){ // target <- obj1
 
                     if (obj1.hitbox[1]>target.hitbox[1] && obj1.hitbox[1]<target.hitbox[1]+target.hitbox[3]){ //y-bounding
-                        if (obj1.projectile && !obj1.explode){
-                            this.damageCalc(obj1, target) 
-                            obj1.explode = true; //destroy projectile      
-                        } else if (!obj1.projectile) this.damageCalc(obj1, target);
-
+                        if (obj1.projectile && !obj1.explode && !obj1.hitList.includes(target.name)){
+                            if (target.side == 0){
+                                if(target.lane == obj1.lane){ //player only can hit from proj in lane
+                                    this.damageCalc(obj1, target, obj3);
+                                    obj1.pierce -= 1;  
+                                    obj1.hitList.push(target.name);                                    
+                                    }
+                                }
+                            else {
+                                this.damageCalc(obj1, target, obj3);
+                                obj1.pierce -= 1;  
+                                obj1.hitList.push(target.name); 
+                            }
+                            if (obj3.area>0){this.explodeDamage(obj1, obj2, obj3)}; //area damage; checks for nearby targets 
+                            if (obj1.pierce<=0){obj1.explode = true}; //destroy projectile      
+                        } else if (!obj1.projectile) 
+                            if (obj1.lane == target.lane){this.damageCalc(obj1, target)};
+                       
                     }
                 }
                 }
             }
         }
+        
 
-    damageCalc(obj1, obj2){ //obj1 attacking obj2
+    damageCalc(obj1, obj2, obj3 = null){ //obj1 (owned by obj3) attacking obj2 
         if (obj2.invulnTime == 0 && obj1.touchHit) {
-            obj2.health -= (obj1.damage-obj2.armor);
-            obj2.knockbackSum += (obj1.damage-obj2.armor)
+            let damage = obj1.damage;
+            let knockback = 1; 
+            if (obj3){obj3.damageDealt+= damage;
+                    knockback = obj3.knockbackMulti; 
+                }
+            if (obj1.chill>0){
+                if ( Math.abs(obj2.speedX)-obj2.chillAmount>0){obj2.chillAmount+= obj1.chill}
+                else obj2.chillAmount = Math.abs(obj2.speedX);
+            }
+
+            if (obj1.poison>0){
+                if (obj2.poisonStack+1<obj1.poisonMax){ //add to max stacks
+                    obj2.poisonAmount += obj1.poison;
+                    obj2.poisonStack++;}
+                obj2.poisonTime = 5;  //four ticks                
+            }
+
+            obj2.health -= damage;
+            obj2.knockbackSum += damage*knockback;
+
             if (obj2.knockbackThresh <= obj2.knockbackSum){
-                if (obj1.position.x>obj2.position.x){ this.knockback(obj2, 1)}
-                else this.knockback(obj2, -1);
+                if (obj1.position.x>obj2.position.x){ this.knockback(obj2, 1, knockback )}
+                else this.knockback(obj2, -1, knockback);
                 obj2.knockbackSum = 0 
+                // obj2.knockbackThresh *=1.2 //increase threshold each time
+
             }
          }
 
+
     }
-    loseLife(){
+    loseLife(ctx){ //mob escapes
         for (const obj of this.mobObjects){
             if (obj.position.x <= -obj.width*2){
-                obj.alive = false;
-                this.player.health -= 1; 
-                console.log(this.player.health);
+                //this.player.health -= 1; 
+                if (!obj.roam){
+                    if (obj.value.length>0){
+                        for (let i = 0; i<obj.value.length;i++){
+                            this.moneyLost+=obj.value[i];
+                            }
+                        }
+                    else {this.moneyLost += obj.value;} //lost money
+                    obj.alive = false; //delete monser; 
+                    this.monsterEscape ++; 
+                } else {obj.speedX = -obj.speedX; obj.left=!obj.left;}
             }
+            else if (obj.position.x >= this.gameWidth && obj.speedX<0)
+                {obj.speedX = -obj.speedX
+                obj.left=!obj.left};
+
         }
 
     }
-    drawGrid(ctx){
-        ctx.beginPath();  // this.gameHeight = gameHeight
-        ctx.moveTo(0, this.gameHeight);
-        ctx.lineTo(1000, this.gameHeight);
-        ctx.lineTo(1000, this.gameHeight - this.rowHeight);
-        ctx.lineTo(0, this.gameHeight - this.rowHeight);
-        ctx.lineTo(0, this.gameHeight - this.rowHeight*2);
-        ctx.lineTo(1000, this.gameHeight - this.rowHeight*2);
-        ctx.lineTo(1000, this.gameHeight - this.rowHeight*3);
-        ctx.lineTo(0, this.gameHeight - this.rowHeight*3);        
-        ctx.stroke();
-    }
+    // drawGrid(ctx){
+    //     ctx.beginPath();  // this.gameHeight = gameHeight
+    //     ctx.moveTo(0, this.gameHeight);
+    //     ctx.lineTo(1000, this.gameHeight);
+    //     ctx.lineTo(1000, this.gameHeight - this.rowHeight);
+    //     ctx.lineTo(0, this.gameHeight - this.rowHeight);
+    //     ctx.lineTo(0, this.gameHeight - this.rowHeight*2);
+    //     ctx.lineTo(1000, this.gameHeight - this.rowHeight*2);
+    //     ctx.lineTo(1000, this.gameHeight - this.rowHeight*3);
+    //     ctx.lineTo(0, this.gameHeight - this.rowHeight*3);        
+    //     ctx.stroke();
+    // }
 
     upgradeMenu(ctx){
-        this.HUDMenu.displayHUD(ctx, this); 
-        this.startMenu.displayMenu(ctx, this ); 
+        this.HUDMenu.displayHUD(ctx, this);  
         this.upgrade.displayMenu(ctx, this);
+
+        if (this.player.health <= 0 ){
+            this.gameOver = true; 
+            this.end.display = true;
+            this.end.displayMenu(ctx, this);
+        }
     }
     spawnMoney(obj){
         if (obj.state == 'die' && !obj.lootDrop){
-            this.moneyObjects.push(new Money(obj))
+            if (obj.value.length>0){
+                let x = -0.6*2 ; //money spread
+                for (let i = 0; i<obj.value.length; i++){
+                    this.moneyObjects.push(new Money(this, obj, obj.value[i], x+i*0.6))
+                }
+            }
+            else {this.moneyObjects.push(new Money(this, obj, obj.value))}
             obj.lootDrop = true; 
+            this.monsterKill++; 
         }
     }
-    update(time){
+    update(){
         this.mobObjects.forEach( (object)=>this.spawnMoney(object)); 
         this.loseLife(); //enemies past 
         this.mobObjects = this.mobObjects.filter(  //removes dead/passing objects
             function (object){
-                return object.alive !== false;});        
+                return (object.alive !== false)});        
         this.lootMoney(this.player, this.moneyObjects);
 
         this.playerObjects.forEach( (object)=>object.update() ); 
-        this.mobObjects.forEach( (object)=>object.update() ); 
-        this.moneyObjects.forEach( (object)=>object.update() ); 
+        this.mobObjects.forEach( (object)=>object.update(this) ); 
+        this.moneyObjects.forEach( (object)=>object.update(this) ); 
         
-        this.playerObjects.forEach( (object)=>this.aggro(object, this.mobObjects) ); 
-        this.mobObjects.forEach( (object)=>this.aggro(object, this.playerObjects) ); 
+        if (this.player.alive){
+            this.playerObjects.forEach( (object)=>this.aggro(object, this.mobObjects) );  //summon attacks
+        }
+        this.mobObjects.forEach( (object)=>this.aggro(object, this.playerObjects) ); //mob attacks
 
         this.collision(this.player, this.mobObjects); 
         this.mobObjects.forEach( (object)=>this.collision(object, this.playerObjects) ); 
+
+        this.mobObjects.forEach( (object)=>object.mobAttack(this)); 
+        this.playerObjects.forEach( (object)=>object.summonAttack(this)); 
         
-        this.playerObjects.forEach( (object)=>
+        this.mobObjects.forEach( (object)=> //mob proj to player 
             object.projectiles.forEach( (object2)=> 
-                 this.collision(object2, this.mobObjects)
+                this.collision(object2, [this.player], object)));
+                
+        
+        this.playerObjects.forEach( (object)=> //player proj to mobs
+            object.projectiles.forEach( (object2)=> 
+                 this.collision(object2, this.mobObjects, object)
                  )
              ); 
 

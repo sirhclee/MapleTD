@@ -1,39 +1,48 @@
 {
     "redDragon":["Summons a Red Dragon to spit hot fire", "",
-                 "Level up increases explosion area"
+                 "Level 1: Baby Dragon", "Level 2: +25% Damage & +1 Projectile",
+                 "Level 3: Evolve! Adds explosion damage", "Level 4+: Increase explosion area + 1 Proj."
                 ],
     "blueDragon":["Summons a Blue Dragon to spew frost", "",
-                "Level up increases projectile pierce amount"
+                "Level 1: Baby Dragon", "Level 2: +1 Projectile & +1 Pierce",
+                "Level 3: Evolve! Chill enemies & +2 Pierce", "Level 4+: Increase chill effect + 1 Proj."
                ],
     "greenDragon":["Summons a Green Dragon to spread poison", "",
-               "Level up increases projectile spread"
+                "Level 1: Baby Dragon", "Level 2: +1 Projectile",
+                "Level 3: Evolve! Adds damage over time", "Level 4+: Increased poison effect + 1 Proj."
               ],
     "blackDragon":["Summons a Black Dragon to shoot bolts", "",
-              "Level up increases knockback force"
+                "Level 1: Baby Dragon", "Level 2: +1 Projectile",
+                "Level 3: Evolve! Adds column damage", "Level 4+: Increase column area + 1 Proj."
              ],
-    "mushroomKnight":["Summons a Mushroom Knight to stall", "",
-             "Level up increases stall duration"
-            ],
+    "mushroomKnight":["Under development" ],
+
     "Blaze": ["Summons Elemental: Blaze", "",
-            "Adds burning projectiles to attacks",
+            "Adds +1 projectile to attacks",
+            "Wiz & Elementals deal +40% damage","",
             "Additional sprites further increase bonus"
         ],
     "Dawn": ["Summons Elemental: Dawn", "",
-            "Adds explosive projectiles to attacks",
+            "Adds +1 projectile to attacks",
+            "Wiz & Elementals deal +20% damage",
+            "Increases pick-up range by 50%", "",
             "Additional sprites further increase bonus"
         ],    
     "Night": ["Summons Elemental: Night", "",
-        "Increases movement speed",
-        "Adds projectile that increases damage taken",
+        "Adds +1 projectile to attacks",
+        "Wiz & Elementals deal +20% damage",
+        "Increases knockback effect by 20%", "",
         "Additional sprites further increase bonus"
         ], 
     "Wind": ["Summons Elemental: Wind", "",
-        "Increases movement speed",
-        "Adds projectiles with knockback to attacks",
+        "Adds +1 projectile to attacks",
+        "Increases speed by 20%", "", 
         "Additional sprites further increase bonus"
         ],
     "Thunder": ["Summons Elemental: Dawn", "",
-        "Adds piercing projectiles to attacks",
+        "Adds +1 projectile to attacks",
+        "Wiz & Elementals deal +15% damage",
+        "Wiz & Elementals projectiles gain +1 pierce", "", 
         "Additional sprites further increase bonus"
          ]
 

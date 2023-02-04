@@ -1,75 +1,115 @@
 {
-    "level1":["wave1-0"],
-    "level2":["wave2-0"],
+    "level1":["wave1-1","wave1-2","wave1-3","wave1-4","wave1-5",
+            "wave1-6","wave1-7","wave1-8","wave1-9","wave1-10"],
 
-    "wave1-0":[ ["spore", 2, 1]],
-    "wave2-0":[ ["stump", 2, 1]],
+    "level2":["wave2-6","wave2-2","wave2-3","wave2-4","wave2-5"],
+
+
+    "level3":["wave1-0"],
+    "wave1-0":[ ["spore", 2, 2]],
     "wave1-1":
-        [ ["spore", 2, 2], ["spore", 2, 3], 
-        ["spore", 2, 4],["spore", 2, 5], ["spore", 2, 6],
-
-        ["spore", 3, 10], ["spore", 3, 11], 
-        ["spore", 3, 12],["spore", 3, 13], ["spore", 3, 14],
-   
-        ["spore", 1, 18], ["spore", 1, 19], 
-        ["spore", 1, 20],["spore", 1, 21], ["spore", 1, 22]    
+        [ ["spore", 2, 2], ["spore", 2, 3], ["spore", 2, 4],["spore", 2, 5], ["spore", 2, 6],
+            ["spore", 1, 10], ["spore", 1, 11], ["spore", 1, 12],["spore", 1, 13], ["spore", 1, 14]
         ],
-  
-    "wave1-2":
-        [ ["orangeMushroom", 2, 2], ["spore", 2, 3], 
-         ["orangeMushroom", 2, 5], ["spore", 2, 6],
-
-        ["orangeMushroom", 3, 10], ["spore", 3, 11], 
-        ["orangeMushroom", 3, 13], ["spore", 3, 14],
-   
-        ["orangeMushroom", 1, 18], ["spore", 1, 19], 
-         ["orangeMushroom", 1, 21], ["spore", 1, 22],  
-        
-        ["orangeMushroom", 2, 24], ["orangeMushroom", 2, 26], 
-        ["orangeMushroom", 2, 28]
-        ],
-
-    "wave1-3":
-        [ ["greenMushroom", 2, 2], ["orangeMushroom", 2, 4], 
-         ["orangeMushroom", 2, 5],["orangeMushroom", 2, 6],
-
-        ["greenMushroom", 3, 10], ["orangeMushroom", 3, 12], 
-        ["orangeMushroom", 3, 13], ["orangeMushroom", 3, 14],
-   
-        ["greenMushroom", 1, 18], ["orangeMushroom", 1, 20], 
-         ["orangeMushroom", 1, 21], ["orangeMushroom", 1, 22],
-        
-        ["greenMushroom", 3, 24], ["greenMushroom", 2, 25], 
-        ["greenMushroom", 1, 26], ["greenMushroom", 3, 27], 
-        ["greenMushroom", 2, 28], ["greenMushroom", 1, 29]
-        ],
-    "wave1-4":
-        [ ["blueMushroom", 2, 2], ["orangeMushroom", 2, 4], 
-         ["orangeMushroom", 2, 5],["orangeMushroom", 2, 6],
-
-         ["blueMushroom", 2, 10], ["greenMushroom", 3, 12], 
-         ["greenMushroom", 3, 13], ["orangeMushroom", 3, 14],
-         ["orangeMushroom", 3, 15], ["spore", 3, 16], 
-         ["spore", 3, 17], ["spore", 3, 18],
-    
-         ["blueMushroom", 2, 18], ["greenMushroom", 1, 19], 
-         ["greenMushroom", 1, 20], ["orangeMushroom", 1, 21],
-         ["orangeMushroom", 1, 22], ["spore", 1, 23], 
-         ["spore", 1, 24], ["spore", 1, 25],
-         
-         ["blueMushroom", [1,2,3], 30]
+    "wave1-2":   
+        [ ["spore", 2, 2], ["spore", 2, 3], ["spore", 2, 4],["orangeMushroom", 2, 6],
+        ["spore", 1, 10], ["spore", 1, 11], ["spore", 1, 12], ["orangeMushroom", 1, 14],
+        ["spore", 1, 18], ["spore", 1, 19], ["spore", 1, 20], ["orangeMushroom", 1, 22]
     ],
 
-    "wave1-5":
-    [ 
-    ["spore", 1, 2], ["orangeMushroom", 2, 2], ["greenMushroom", 3, 2], 
-    ["blueMushroom", 1, 5], ["hornyMushroom", 2, 5], ["mushmom", 3, 5], 
-    ["stump", 1, 8], ["darkStump", 2, 8], ["axeStump", 3, 8],
-    ["ghostStump", 1, 12], ["boar", 2, 12], ["fireBoar", 3, 12],
-    ["ironBoar", 3, 15]
-   
+    "wave1-3":
+        [ ["greenMushroom", 2, 3], ["greenMushroom", 3, 4], ["spore", 2, 5], ["spore", 2, 6], ["spore", 2, 7],
+        ["greenMushroom", 1, 10], ["greenMushroom", 3, 11], ["spore", 1, 12], ["spore", 1, 13], ["spore", 1, 14],
+        ["greenMushroom", 3, 17], ["greenMushroom", 1, 18], ["spore", 3, 19], ["spore", 3, 20], ["spore", 3, 21]
+        ],
 
-    ]
+    "wave1-4":
+        [ ["greenMushroom", 2, 3], ["greenMushroom", 3, 4], ["orangeMushroom", 2, 5], ["orangeMushroom", 2, 7],
+        ["greenMushroom", 1, 10], ["greenMushroom", 3, 11], ["orangeMushroom", 1, 12], ["orangeMushroom", 1, 14],
+        ["greenMushroom", 3, 17], ["greenMushroom", 1, 18], ["orangeMushroom", 3, 19],  ["orangeMushroom", 3, 21]
+        ],
+
+    "wave1-5":
+        [ ["greenMushroom", 2, 3], ["greenMushroom", 3, 4], ["orangeMushroom", 2, 5], ["blueMushroom", 2, 8],
+        ["greenMushroom", 1, 10], ["greenMushroom", 3, 11], ["orangeMushroom", 1, 12], ["blueMushroom", 1, 15],
+        ["greenMushroom", 3, 17], ["greenMushroom", 1, 18], ["orangeMushroom", 3, 19],  ["blueMushroom", 3, 22]
+        ],
+    "wave1-6":   
+        [ ["spore", 2, 2], ["spore", 2, 2.5], ["spore", 2, 3],["spore", 2, 3.5],["spore", 2, 4], 
+        ["spore", 2, 4.5], ["spore", 2, 5],["spore", 2, 5.5], ["spore", 2, 6],["spore", 2, 6.5], 
+        ["blueMushroom", 1, 7],
+
+        ["spore", 1, 11], ["spore", 1, 11.5], ["spore", 1, 12],["spore", 1, 12.5],["spore", 1, 13], 
+        ["spore", 3, 17], ["spore", 3, 17.5],["spore", 3, 18], ["spore", 3, 18.5],["spore", 3, 19], 
+        ["blueMushroom", [0,2], 25]
+      ],
+
+    "wave1-7":   
+        [ ["blueMushroom", 2, 2], ["blueMushroom", 2, 4], ["blueMushroom", 2, 6],["greenMushroom", 2, 8],["greenMushroom", 3, 13], 
+        ["blueMushroom", 3, 16], ["blueMushroom", 3, 18], ["blueMushroom", 3, 20],["greenMushroom", 2, 22],["greenMushroom", 1, 27], 
+        ["blueMushroom", 1, 30], ["blueMushroom", 1, 32], ["blueMushroom", 1, 34],["greenMushroom", 3, 36],["greenMushroom", [0,1,2], 44]
+        ],
+
+    "wave1-8":   
+        [ ["blueMushroom", 3, 2], ["orangeMushroom", 3, 3],["blueMushroom", 3, 4],["orangeMushroom", 3, 5], ["blueMushroom", 3, 6],["greenMushroom", 2, 8],["greenMushroom", 3, 13], ["orangeMushroom", 1, 14], 
+        ["blueMushroom", 2, 16], ["orangeMushroom", 2, 17],["blueMushroom", 2, 18], ["blueMushroom", 2, 19],["greenMushroom", 2, 22],["greenMushroom", 1, 27], ["orangeMushroom", 3, 28],
+        ["blueMushroom", 1, 30], ["orangeMushroom", 1, 31],["blueMushroom", 1, 32], ["orangeMushroom", 1, 33],["blueMushroom", 1, 34],["greenMushroom", 3, 36],["greenMushroom", [0,1,2], 44]
+        ],
+
+    "wave1-9":   
+        [ ["blueMushroom", [1,2], 3], ["orangeMushroom",  [1,2], 4],["blueMushroom",  [1,2], 5],["orangeMushroom",  [1,2], 5], ["blueMushroom",  [1,2], 6], ["greenMushroom",  [1,2], 14],  
+        ["blueMushroom", 2, 20], ["orangeMushroom", 2, 21],["blueMushroom", 2, 22], ["goldMushroom1", 1, 23], ["blueMushroom", 2, 24], ["greenMushroom", 3, 28],
+        ["blueMushroom", 1, 35], ["orangeMushroom", 1, 36],["blueMushroom", 1, 37],["orangeMushroom", 1, 38],["blueMushroom", 1, 39], ["greenMushroom", 3, 37]
+        ],
+
+    "wave1-10":[ ["mushmom", 2, 1], 
+    ["orangeMushroom",  [0,2], 10], ["orangeMushroom", [0,2], 12], ["orangeMushroom", [0,2], 14], ["orangeMushroom",  [0,2], 16], 
+    ["orangeMushroom",  [0,2], 24], ["orangeMushroom", [0,2], 26], ["orangeMushroom", [0,2], 28], ["orangeMushroom",  [0,2], 30]
+        ],
+
+    
+    "wave2-1":[ ["stump", [0,1,2], 2], ["stump", [0,1,2], 3], ["stump", [0,1,2], 4],
+            ["stump", [0,1,2], 16], ["stump", [0,1,2], 17], ["stump", [0,1,2], 18],
+            ["stump", [0,1,2], 30], ["stump", [0,1,2], 31], ["stump", [0,1,2], 32]
+        ],
+
+    "wave2-2":[ ["stump", [0,1,2], 2], ["stump", [0,1,2], 3], ["darkStump", [0,1,2], 4],
+        ["stump", [0,1,2], 16], ["darkStump", [0,1,2], 17], ["stump", [0,1,2], 18],
+        ["darkStump", [0,1,2], 30], ["stump", [0,1,2], 31], ["stump", [0,1,2], 32]
+    ],  
+    
+    "wave2-3":[ ["stump", 1, 2], ["darkStump", 3, 2], ["stump", 1, 4],  ["darkStump", 3, 4], ["stump", 1, 6], ["darkStump", 3, 6], 
+        ["stump", 1, 18], ["darkStump", 2, 18], ["stump", 1, 20],  ["darkStump", 2, 20], ["stump", 1, 22], ["darkStump", 2, 22],
+        ["stump", 3, 34], ["darkStump", 1, 34], ["stump", 3, 36],  ["darkStump", 1, 36], ["stump", 3, 38], ["darkStump", 1, 38]
+    ],           
+
+    "wave2-4":[ ["stump", [0,1,2], 2], ["stump", [0,1,2], 3],  ["darkStump", [0,1,2], 4],   ["ghostStump", 1, 5],
+        ["stump", [0,1,2], 12], ["stump", [0,1,2], 13],  ["darkStump", [0,1,2], 14],   ["ghostStump", 2, 15],
+        ["stump", [0,1,2], 22], ["stump", [0,1,2], 23],  ["darkStump", [0,1,2], 24],   ["ghostStump", 3, 25]
+    ],           
+
+    "wave2-5":[ ["stump", [0,1,2], 2], ["ghostStump", [1,2], 3], ["darkStump", [0,2], 3],  ["darkStump", [0,1,2], 4],   ["ghostStump", 1, 5],
+    ["stump", [0,1,2], 12], ["ghostStump", [0,1], 3], ["darkStump", 3, 3],  ["darkStump", [0,1,2], 14],   ["ghostStump", 2, 15],
+    ["stump", [0,1,2], 22], ["ghostStump", [1,2], 23],  ["darkStump", [0,1], 24],   ["ghostStump", 3, 25]
+    ], 
+    
+    "wave2-6":
+        [ ["boar", 2, 2], ["boar", 2, 2.5], ["boar", 2, 3],["boar", 2, 3.5], ["boar", 2, 4],
+        ["boar", 2, 4.5], ["boar", 2, 5], ["boar", 2, 5.5],["boar", 2, 6.5], ["boar", 2, 7],
+        ["boar", 2, 7.5], ["boar", 2, 8], ["boar", 2, 8.5],["boar", 2, 9], ["boar", 2, 9.5]
+
+    ],
+
+
+
+
+    "wave3-0":[ ["neckiJr", 2, 1], ["stirge", 2, 3], 
+            ["jrWraith", 1, 3], ["wraith", 1, 5],["shade", 1, 7] ],
+
+
+    "wave4-0": [  ["neckiJr", [0,1], 1],["neckiJr", [0,1], 1.5],["neckiJr", [0,1], 2], 
+    ["wraith", [0,1], 4],["shade", [0,1], 7],["wraith", [0,1], 4],["shade", [0,1], 7],
+    ["wraith", [0,1], 4],["shade", [0,1], 7],["shade", [0,1],8]]
 
 
 
