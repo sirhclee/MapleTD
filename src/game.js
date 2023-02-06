@@ -368,10 +368,10 @@ export default class Game{
         this.playerObjects = [this.player];
         this.inputHandler = new InputHandler(this.player, this.upgrade, this);        
 
-        this.playerObjects.push(new Mob(this.player, 'redDragon', 0,4,5)); 
-        this.playerObjects.push(new Mob(this.player, 'blueDragon', 0,2,5)); 
-        this.playerObjects.push(new Mob(this.player, 'greenDragon', 0,3,5)); 
-        this.playerObjects.push(new Mob(this.player, 'blackDragon', 0,1,5)); 
+        // this.playerObjects.push(new Mob(this.player, 'redDragon', 0,4,5)); 
+        // this.playerObjects.push(new Mob(this.player, 'blueDragon', 0,2,5)); 
+        // this.playerObjects.push(new Mob(this.player, 'greenDragon', 0,3,5)); 
+        // this.playerObjects.push(new Mob(this.player, 'blackDragon', 0,1,5)); 
 
     }
 
