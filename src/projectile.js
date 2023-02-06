@@ -3,18 +3,18 @@ import SpriteAnimation from './SpriteAnimation';
 export default class Projectile{
     constructor(player, type='energyball',x = 0, y=0, direction = 1 ){
         this.typeInfo = { 'energyball': {'speed': 10, 'travel':2, 'explode':5, 'xOff': 90},
-                        'yellowBall': {'speed': 10, 'travel':2, 'explode':5, 'xOff': 90,'yOff':12},
-                        'purpleBall': {'speed': 10, 'travel':2, 'explode':5, 'xOff': 90,'yOff':12},
-                        'redBall': {'speed': 10, 'travel':2, 'explode':5, 'xOff': 90,'yOff':12},
-                        'greenBall': {'speed': 10, 'travel':2, 'explode':5, 'xOff': 90,'yOff':12},
-                        'blueBall': {'speed': 10, 'travel':2, 'explode':5, 'xOff': 90,'yOff':12},
+                        'yellowBall': {'speed': 10, 'travel':2, 'explode':5, 'xOff': 50,'yOff':35},
+                        'purpleBall': {'speed': 10, 'travel':2, 'explode':5, 'xOff': 50,'yOff':35},
+                        'redBall': {'speed': 10, 'travel':2, 'explode':5, 'xOff': 50,'yOff':35},
+                        'greenBall': {'speed': 10, 'travel':2, 'explode':5, 'xOff': 50,'yOff':35},
+                        'blueBall': {'speed': 10, 'travel':2, 'explode':5, 'xOff': 50,'yOff':35},
                         'fireball': {'speed': 3, 'travel':1, 'explode':2, 'xOff': 70, 'yOff':-10 }, 
-                        'fireball2': {'speed': 12, 'travel':1, 'explode':3, 'xOff': 115, 'yOff':-40 }, 
                         'batball': {'speed': 6, 'travel':3, 'explode':4, 'xOff': 105},
-                        'poisonball': {'speed': 7, 'travel':1, 'explode':5, 'xOff':115,  'yOff':-40 },
-                        'iceball': {'speed': 8, 'travel':2, 'explode':4, 'xOff':135,  'yOff':-40 },
-                        'lightningball': {'speed': 10, 'travel':2, 'explode':7, 'xOff':80},
-                        'thunderball': {'speed': 12, 'travel':2, 'explode':7, 'xOff':110,'yOff':-40 } }
+                        'fireball2': {'speed': 12, 'travel':1, 'explode':3, 'xOff': 95, 'yOff':-10 },  //-15, +20
+                        'poisonball': {'speed': 7, 'travel':1, 'explode':5, 'xOff':85,  'yOff':-5 },
+                        'iceball': {'speed': 8, 'travel':2, 'explode':4, 'xOff':95,  'yOff':-5 },
+                        'lightningball': {'speed': 10, 'travel':2, 'explode':7, 'xOff':80}, //player ball
+                        'thunderball': {'speed': 12, 'travel':2, 'explode':7, 'xOff':80,'yOff':-10 } }
         
         this.gameWidth = player.gameWidth;
         this.gameHeight = player.gameHeight;
@@ -71,14 +71,12 @@ export default class Projectile{
         this.animations = [this.travel, this.burst]; 
 
         if (this.type == 'thunderball'){
-            this.bolt = new SpriteAnimation('thunderbolt/explode_?.png', 5, this.frames, "explode", true); //
-            console.log('loadsprite')
-   
+            this.bolt = new SpriteAnimation('thunderbolt/explode_?.png', 5, this.frames, "explode", true); //   
         }
     }
 
     draw(ctx, pause) {
-        //ctx.fillRect(this.position.x, this.position.y, this.width, this.height); //reference
+        //ctx.fillRect(this.position.x, this.position.y, this.width, this.height); // hitbox
         if (this.type != "None"){ 
             const animation = this.animations.find((animation)=>animation.isFor(this.state))
             const image = animation.getImage(pause);       
@@ -88,6 +86,7 @@ export default class Projectile{
                     let boltImage = this.bolt.getImage(pause); 
                     ctx.drawImage(boltImage, this.position.x, 240)
                     }
+
                 }; 
             if (animation.shouldStop()){this.delete = true;}
     
@@ -95,13 +94,13 @@ export default class Projectile{
             if (!this.left){//flip based on sprite orientation
                 ctx.scale(-1,1);
                 ctx.drawImage(image, -this.position.x- this.xOff+15, this.position.y-60+this.yOff);}
-            else {ctx.drawImage(image, this.position.x-this.xOff+20, this.position.y-60+this.yOff); }
+            else {ctx.drawImage(image, this.position.x-this.xOff+35, this.position.y-60+this.yOff); }
 
             ctx.setTransform(1,0,0,1,0,0); 
             }
         else {
-        ctx.drawImage(this.sprite, this.position.x, this.position.y+25); //draw mob (x, y, height, width)
-        if (this.explode){this.delete = true}; 
+            ctx.drawImage(this.sprite, this.position.x, this.position.y+25); //draw mob (x, y, height, width)
+            if (this.explode){this.delete = true}; 
         }
 
     } 

@@ -23,12 +23,12 @@ export default class Game{
         this.restart.initialize(this);
         this.gameOver = false; 
         this.restartWindow = false;
-        this.titleDisplay = false;//false; //enable for release
+        this.titleDisplay = true;//false; //enable for release
         this.load = false;
         this.playerObjects =[];
         this.mobObjects =[]; 
         this.moneyObjects = []; 
-        this.level = 2;
+        this.level = 3;
         this.finalLevel =3 ; 
         this.wave = 0; 
         this.lane = 1; 
@@ -368,10 +368,10 @@ export default class Game{
         this.playerObjects = [this.player];
         this.inputHandler = new InputHandler(this.player, this.upgrade, this);        
 
-        this.playerObjects.push(new Mob(this.player, 'redDragon', 0,1,3)); 
-        this.playerObjects.push(new Mob(this.player, 'blueDragon', 0,2,3)); 
-        this.playerObjects.push(new Mob(this.player, 'greenDragon', 0,3,3)); 
-        this.playerObjects.push(new Mob(this.player, 'blackDragon', 0,4,3)); 
+        this.playerObjects.push(new Mob(this.player, 'redDragon', 0,4,5)); 
+        this.playerObjects.push(new Mob(this.player, 'blueDragon', 0,2,5)); 
+        this.playerObjects.push(new Mob(this.player, 'greenDragon', 0,3,5)); 
+        this.playerObjects.push(new Mob(this.player, 'blackDragon', 0,1,5)); 
 
     }
 
@@ -382,11 +382,15 @@ export default class Game{
         ctx.drawImage(this.bgSky, 0, 0); 
         ctx.drawImage(this.bgStage, 0, 0); 
         this.startMenu.displayMenu(ctx, this );
-        this.mobObjects.forEach( (object)=>object.draw(ctx, this.pause) )
+        
         this.playerObjects.forEach( (object)=>object.emote(this)); 
         this.playerObjects.forEach( (object)=>object.draw(ctx,this.pause) )
+        this.mobObjects.forEach( (object)=>object.draw(ctx, this.pause) );
         this.moneyObjects.forEach( (object)=>object.draw(ctx,this.pause) ); 
-        
+        this.playerObjects.forEach( (object)=>object.drawProj(ctx,this.pause) ); //player proj
+        this.mobObjects.forEach( (object)=>object.drawProj(ctx, this.pause) ); //mob proj 
+
+
         this.player.recallIcon(ctx, this);
     
     } 
@@ -400,21 +404,26 @@ export default class Game{
         else{
             obj.hit = true; 
             obj.knockbackTime = this.gameTimeReal;  //stores when target knockback;
-            obj.knockbackForce = -4*direction*(1+ (multi-1)/4); //add as stat
+            if (obj.boss){-2*direction*(1+ (multi-1)/4)} //boss less knockback
+            else {obj.knockbackForce = -4*direction*(1+ (multi-1)/4)}; //add as stat
+            
         }
     }
     aggro(obj1, obj2){ // checks if obj1 range is within obj2
         for (const target of obj2){
             if (target.health>0){
                 
-                if (obj1.hitbox[0]+obj1.hitbox[2]+obj1.range>target.hitbox[0] && 
+                if (obj1.hitbox[0]+obj1.hitbox[2]+obj1.range>target.hitbox[0] || 
                     obj1.hitbox[0]-obj1.range<target.hitbox[0]+target.hitbox[2]){ //aggro from right
                         if (obj1.hitbox[1]<target.hitbox[1] && obj1.hitbox[1]+obj1.hitbox[3]>target.hitbox[1] ||
                             obj1.lane == target.lane){
                          {if (obj1.aggro){obj1.attack()}; //only aggro mobs have attack animations
+                            }
                         }
-                    }
+                        else if (obj1.aggro && obj1.side == 1 ){obj1.attack()}; //enemies attack on CD
+
                 }
+
             }
          }
      }
@@ -448,9 +457,16 @@ export default class Game{
                 if ( (obj1.hitbox[0]<target.hitbox[0] && obj1.hitbox[0]+obj1.hitbox[2]+obj3.area > target.hitbox[0]) || //obj1 ->target
                     (obj1.hitbox[0]+obj1.hitbox[2]>target.hitbox[0]+target.hitbox[2] && obj1.hitbox[0]-obj3.area<target.hitbox[0]+target.hitbox[2] )){ 
                         if ((obj1.hitbox[1]>target.hitbox[1] && obj1.hitbox[1]<target.hitbox[1]+target.hitbox[3])||obj3.column>0){
-                            target.health -= obj3.damage; 
-                            obj3.explodeDamageDealt += obj3.damage;
-                        }
+                            if (obj1.poison>0){
+                                if (target.poisonStack+1<obj1.poisonMax){ //add to max stacks
+                                    target.poisonAmount += obj1.poison;
+                                    target.poisonStack++;}
+                                target.poisonTime = 5;  //four ticks                
+                                } 
+                            else{
+                                target.health -= obj3.damage; 
+                                obj3.explodeDamageDealt += obj3.damage;}
+                         }
                 }
             }
         }
@@ -501,14 +517,6 @@ export default class Game{
                 if ( Math.abs(obj2.speedX)-obj2.chillAmount>0){obj2.chillAmount+= obj1.chill}
                 else obj2.chillAmount = Math.abs(obj2.speedX);
             }
-
-            if (obj1.poison>0){
-                if (obj2.poisonStack+1<obj1.poisonMax){ //add to max stacks
-                    obj2.poisonAmount += obj1.poison;
-                    obj2.poisonStack++;}
-                obj2.poisonTime = 5;  //four ticks                
-            }
-
             obj2.health -= damage;
             obj2.knockbackSum += damage*knockback;
 
@@ -527,7 +535,7 @@ export default class Game{
         for (const obj of this.mobObjects){
             if (obj.position.x <= -obj.width*2){
                 //this.player.health -= 1; 
-                if (!obj.roam){
+                if (!obj.flip){
                     if (obj.value.length>0){
                         for (let i = 0; i<obj.value.length;i++){
                             this.moneyLost+=obj.value[i];

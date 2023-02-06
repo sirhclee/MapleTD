@@ -20,7 +20,6 @@ export default class Mob{
         this.fade = 1; 
         
         this.alive = true;  
-        this.invulnTime =  0; 
         this.attackCD = 0; 
         this.maxSpeed = 15; 
         this.speed = 2;
@@ -35,9 +34,12 @@ export default class Mob{
         this.gravityTime = 1;
         this.lane = game.lane;  // which lane
         if (this.side == 1){ //Enemy Mob 
+            this.invulnTime =  0; 
             this.name = this.type+game.mobCount; 
-            this.width = 50; //sprite size 
-            this.height = 65; 
+            this.width = 45; //sprite size 
+            
+            if (this.typeInfo[this.type]['height']){this.height = this.typeInfo[this.type]['height']}
+            else this.height = 65;
             if (this.typeInfo[this.type]['range']){this.range = this.typeInfo[this.type]['range']}
             else {this.range = 10;}
             this.left = true;
@@ -53,6 +55,7 @@ export default class Mob{
             }
         }
         else { // PC pets
+            this.invulnTime = 1; 
             this.width = 50; //sprite size 
             this.height = 50; 
             this.range = 600; //whole lane?
@@ -63,6 +66,7 @@ export default class Mob{
             this.yOff=0;
             this.xOff=0;
             this.damageDealt = 0;
+            this.aggro = true;
             this.name = this.typeInfo[this.type]['name'];
             if (level!=0) {this.level = level}; 
             this.label = 'Lvl. ' + this.level; 
@@ -72,18 +76,20 @@ export default class Mob{
             this.position = {  //position 
             x: (game.curTile*80)+game.width/2, 
             y: game.floor+30
-            }   
-            console.log(this.position); 
+            }  
         };  //offset for sprites 
         //if (this.typeInfo[this.type]['yOff']) (this.position.y -=this.typeInfo[this.type]['yOff']) ;
         if (this.typeInfo[this.type]['spriteType']){this.loadSprite = this.typeInfo[this.type]['spriteType'][0]}
         else {this.loadSprite = this.type};
         this.form = 0; 
-        if (this.typeInfo[this.type]['damage']){ //mob attacks
-                this.damage = this.typeInfo[this.type]['damage']
-                this.aggro = true;
-                }
-        else {this.damage=1; this.aggro=false};
+        if (this.typeInfo[this.type]['damage']){this.damage = this.typeInfo[this.type]['damage']}
+        else this.damage = 1;
+        if (this.typeInfo[this.type]['aggro'])this.aggro = true;
+
+        if (this.typeInfo[this.type]['width2']){this.width2 = this.typeInfo[this.type]['width2']}
+        else {this.width2=0};
+        if (this.typeInfo[this.type]['height2']){this.height2 = this.typeInfo[this.type]['height2']}
+        else this.height2 = 0;
 
         if (this.typeInfo[this.type]['yOff']){this.yOff = this.typeInfo[this.type]['yOff']}
         if (this.typeInfo[this.type]['xOff']){this.xOff = this.typeInfo[this.type]['xOff']}
@@ -91,10 +97,10 @@ export default class Mob{
                 this.position.y-=70; this.height+=100}; 
         if (this.typeInfo[this.type]['roam']){
             this.roam = true; 
-            this.roamTime = 10;
+            this.roamTime = 50;
             this.roamY = this.lane*game.rowHeight; 
-            this.roamLimits = [0,game.rowHeight,game.rowHeight*2]; //0,1,2
-            this.destination = 0;
+            this.roamLimits = [0, game.rowHeight, game.rowHeight*2]; //0,1,2
+            //this.destination = 0;
          }
         else {this.roam = false}; 
         
@@ -134,49 +140,57 @@ export default class Mob{
         this.attackStart = 0;
         this.delayAttack = false;
 
+        if (this.typeInfo[this.type]['flip']){this.flip = true }
+        if (this.typeInfo[this.type]['weird']){
+            this.weird = true; 
+            this.weirdStart = game.gameTimeReal; 
+            this.weirdTime = Math.floor(Math.random()*3000)+2000;
+
+        }
+
         if (test==1){
-            this.position.x = 270; 
+            this.position.x = 260; 
             this.position.y = 395; //bottom
             this.lane = 0;
 
         }
         else if (test==2){
-            this.position.x = 270; 
+            this.position.x = 260; 
             this.position.y = 305; //middle
             this.lane = 1;
             
         }
         else if (test==3){
-            this.position.x = 270; 
+            this.position.x = 260; 
             this.position.y = 215; //top 
             this.lane = 2;    
         }
         else if (test==4){
-            this.position.x = 330; 
-            this.position.y = 305; // middle
+            this.position.x = 340; 
+            this.position.y = 305; // middle #2
             this.lane = 1;
             
         }
         if (this.type == 'redDragon'){
-            if (this.level>=2){this.projectileAmount++; this.damageMulti+=0.25}
-            if (this.level>=3){this.area += 80; this.damageMulti+=0.25}
-            if (this.level>=4){this.area +=80; this.projectileAmount ++};
+            if (this.level>=2){this.projectileAmount++; this.damageMulti+=0.3}
+            if (this.level>=3){this.area += 60; this.damageMulti+=0.3}
+            if (this.level>=4){this.area +=40; this.projectileAmount++};
         };
 
         if (this.type == 'blueDragon'){
-            if (this.level>=2){this.projectileAmount++;}
-            if (this.level>=3){this.chill += 0.15; this.pierce += 1}
-            if (this.level>=4){this.chill += 0.05; this.projectileAmount ++};
+            if (this.level>=2){this.projectileAmount++; this.pierce += 1;}
+            if (this.level>=3){this.chill += 0.2; this.pierce += 1}
+            if (this.level>=4){this.chill += 0.1; this.projectileAmount++};
         };
         if (this.type == 'greenDragon'){
             if (this.level>=2){this.projectileAmount++;}
-            if (this.level>=3){this.poison += 0.5; this.poisonMax+=6;this.pierce += 1}
-            if (this.level>=4 ){this.poison += 0.5; this.poisonMax+=3; this.projectileAmount ++}
+            if (this.level>=3){this.poison += 0.4; this.area += 20; this.poisonMax+=10;}
+            if (this.level>=4 ){this.poison += 0.4; this.area += 10; this.poisonMax+=5; this.projectileAmount++}
         };
         if (this.type == 'blackDragon'){
             if (this.level>=2){this.projectileAmount++; this.damageMulti+=0.2}
-            if (this.level>=3){this.area +=50; this.column=1;this.damageMulti+=0.2}
-            if (this.level>=4){this.area +=50; this.projectileAmount ++}
+            if (this.level>=3){this.area +=15; this.column=1;this.damageMulti+=0.2}
+            if (this.level>=4){this.area +=15; this.projectileAmount++}
         };
         if (this.level>=3){this.evolve()} 
 
@@ -226,24 +240,24 @@ export default class Mob{
             if (this.level==3){this.evolve()} 
             if (this.type == 'redDragon'){
                 if (this.level==2){this.projectileAmount++; this.damageMulti+=0.25}
-                else if (this.level==3){this.area += 80; this.damageMulti+=0.25}
-                else if (this.level>=4){this.area +=80; this.projectileAmount ++};
+                else if (this.level==3){this.area += 60; this.damageMulti+=0.25}
+                else if (this.level>=4){this.area += 30; this.projectileAmount ++};
             };
 
             if (this.type == 'blueDragon'){
                 if (this.level==2){this.projectileAmount++;}
-                else if (this.level==3){this.chill += 0.15; this.pierce += 1}
-                else if (this.level>=4){this.chill += 0.05; this.projectileAmount ++};
+                else if (this.level==3){this.chill += 0.2; this.pierce += 1}
+                else if (this.level>=4){this.chill += 0.1; this.projectileAmount ++};
             };
             if (this.type == 'greenDragon'){
                 if (this.level==2){this.projectileAmount++;}
-                else if (this.level==3){this.poison += 0.5; this.poisonMax+=6;this.pierce += 1}
-                else if (this.level>=4 ){this.poison += 0.5; this.poisonMax+=3; this.projectileAmount ++}
+                else if (this.level==3){this.poison += 0.6; this.poisonMax+=6;this.pierce += 1}
+                else if (this.level>=4 ){this.poison += 0.6; this.poisonMax+=3; this.projectileAmount ++}
             };
             if (this.type == 'blackDragon'){
                 if (this.level==2){this.projectileAmount++; this.damageMulti+=0.2}
-                else if (this.level==3){this.area +=50; this.column=1;this.damageMulti+=0.2}
-                else if (this.level>=4){this.area +=50; this.projectileAmount ++}
+                else if (this.level==3){this.area +=20; this.column=1;this.damageMulti+=0.2}
+                else if (this.level>=4){this.area +=20; this.projectileAmount ++}
             };
         }
         // stat updates .damageMulti
@@ -280,10 +294,11 @@ export default class Mob{
     summonAttack(){ //summon attacks 
         if ( !this.attacked){
             if (this.angry.getFrame()==2){
-                this.projectiles.push( new Projectile(this, this.typeInfo[this.type]['proj'][this.form]));
+                this.projectiles.push( new Projectile(this, this.typeInfo[this.type]['proj'][this.form], this.position.x, this.position.y-50));
                 if (this.projectileAmount>0){ //extra projectiles 
                     for (let i=1; i<=this.projectileAmount; i++){ 
-                    setTimeout( ()=> {this.projectiles.push( new Projectile(this, this.typeInfo[this.type]['proj'][this.form]));}, 130+130*i)
+                    setTimeout( ()=> {this.projectiles.push( new Projectile(this, this.typeInfo[this.type]['proj'][this.form], this.position.x, this.position.y-50));
+                        }, 120*i)
                     }
                 }
                 this.attacked = true;
@@ -299,7 +314,7 @@ export default class Mob{
             if (this.loadSprite=='stumpy'){
                 if (this.angry.getFrame() == 9){
                     this.projectiles.push( new Projectile(this, this.typeInfo[this.type]['proj'], 
-                    this.position.x-40, this.position.y-20));    
+                    this.position.x-40, this.position.y+30));    
                      this.attacked = true;
                      this.attackCD = this.attackSpeed;
                 };
@@ -331,6 +346,7 @@ export default class Mob{
 
     draw(ctx, pause) {
         const animation = this.animations.find((animation)=>animation.isFor(this.state))
+        //if (this.hitbox){ ctx.fillRect(this.hitbox[0],this.hitbox[1], this.hitbox[2], this.hitbox[3]);}
         //ctx.fillRect(this.position.x, this.position.y, this.width, this.height); 
         //ctx.fillRect(this.position.x-this.range, this.position.y, this.width+2*this.range, this.height); //range
         if (this.side == 0 && this.form==1 && this.state=='attack'){this.xOff2 = -51} //attack offset
@@ -387,12 +403,12 @@ export default class Mob{
         if (!this.left){//flip based on sprite orientation
             ctx.scale(-1,1);
             ctx.drawImage(image, -this.position.x-this.width+this.xOff+this.xOff2, this.position.y+this.yOff );}
-        else {ctx.drawImage(image, this.position.x+this.xOff, this.position.y+this.yOff); }
+        else {ctx.drawImage(image, this.position.x+this.xOff+this.xOff2, this.position.y+this.yOff); }
     
         if (this.chillAmount>0){
             const buffer = document.createElement('canvas'); // Image tinting
             buffer.width = 200;//image.width;
-            buffer.height = 200;//image.height;
+            buffer.height = 400;//image.height;
             const btx = buffer.getContext('2d');
             btx.drawImage(image, 0,0);
             btx.fillStyle = "#2c68dc";
@@ -409,18 +425,23 @@ export default class Mob{
         ctx.globalAlpha = 1;
         ctx.setTransform(1,0,0,1,0,0); 
 
-        if (this.poisonAmount>0){
+        if (this.poisonAmount>0 && this.health>0){
             if (!this.poisonLoaded){
                 this.poisonGraphic = new SpriteAnimation('poisonEffect/poison?.png', 4, 10, "poison");
                 this.poisonLoaded = true; }
             else {
                     let poisonSpriteImage = this.poisonGraphic.getImage(pause); 
-                    ctx.drawImage(poisonSpriteImage,this.position.x-10,this.position.y-this.height)
+                    if (this.boss) {ctx.drawImage(poisonSpriteImage,this.position.x-10,this.position.y-this.height+75)}
+                    else ctx.drawImage(poisonSpriteImage,this.position.x-10,this.position.y-this.height);
                 }
             }
 
-        this.projectiles.forEach( (object)=>object.draw(ctx, pause) )
-        }       
+        }   
+    
+    drawProj(ctx, pause){
+            this.projectiles.forEach( (object)=>object.draw(ctx, pause) ) //draw projectiles 
+        }    
+        
                 
     update(game){
         if (this.side === 1){  // Mob 
@@ -436,23 +457,50 @@ export default class Mob{
 
                 // if (this.position.x<-this.width*2) {this.position.x = -this.width*2}; //left border
                 // if (this.position.x>this.gameWidth-this.width) {this.position.x = this.gameWidth-this.width;} //right border
+                if (this.weird){
+                    if (game.gameTimeReal-this.weirdStart> this.weirdTime){
+                        this.weirdStart = game.gameTimeReal; 
+                        this.weirdTime = Math.floor(Math.random()*2000)+500;
+                        this.speedX  = -this.speedX;
+                        if (this.speedX>0) {this.weirdTime+=700}; //bias moving forward
+                    }
+                    if (this.speedX<0 && this.position.x>this.gameWidth) this.speedX = abs(this.speedX); 
+                }
+
+
+            //     this.roam = true; 
+            //     this.roamTime = 5000;
+            //     this.roamY = this.lane*game.rowHeight; 
+            //     this.roamLimits = [0, game.rowHeight, game.rowHeight*2]; //0,1,2
+            //     this.destination = 0;
+            //  }
 
                 if (this.roam){
                     this.roamTime--;
-                    
                     if (this.roamTime == 0){
                         this.destination = Math.floor(Math.random()*3); //random 0,1,2
-                        this.roamTime = 200; 
+                        this.roamTime = Math.floor(Math.random()*250)+1000;
                     }
 
+                    let speedY = 3;//
+                    if (this.speedX-this.chillAmount*chillDirect<=1) {speedY=1}
+                    else if (this.speedX-this.chillAmount*chillDirect<=2) {speedY=2};
                     if (this.roamY> this.roamLimits[this.destination]){
-                        this.position.y-=2;//this.speedX+this.chillAmount)/2;
-                        this.roamY-=2; //(this.speedX+this.chillAmount)/2;
+                        this.position.y+=speedY ;
+                        this.roamY-=speedY ;
     
                     } else if (this.roamY<this.roamLimits[this.destination]){
-                        this.position.y+=2; //(this.speedX-this.chillAmount)/2;
-                        this.roamY+=2;
+                        this.position.y-=speedY ;
+                        this.roamY+=speedY;
                     }
+
+                    if (this.roamY+2> this.roamLimits[this.destination] && this.roamY-2<this.roamLimits[this.destination]){
+                        this.position.y -= (this.roamY-this.roamLimits[this.destination]); 
+                        this.roamY = this.roamLimits[this.destination];
+                    }
+
+                    if (this.roamY == this.roamLimits[this.destination]){
+                        this.lane = this.roamLimits.indexOf(this.roamY)}; //update lane during move
             }
 
                 if (this.poisonTime>0){ ///POISON
@@ -477,6 +525,7 @@ export default class Mob{
                     this.position.x += this.knockbackForce;
                     if (this.knockbackForce>0){
                         this.knockbackForce-=this.knockbackResist;
+                        if (this.position.x>this.gameWidth+50){this.position.x=this.gameWidth+50}
                         if (this.knockbackForce<0) this.knockbackForce = 0
                         } //backwards
                     else if (this.knockbackForce<0){
@@ -516,7 +565,8 @@ export default class Mob{
                 if (random <5){this.state = 'emote1'; time = this.emoteLength[0];}
                 else {this.state = 'emote6';time = this.emoteLength[5] };
                 
-                this.emoteTimeOut = setTimeout(()=> {this.emoteTime = 600+Math.floor(Math.random()*500);
+                this.emoteTimeOut = setTimeout(()=> {
+                    this.emoteTime = 600+Math.floor(Math.random()*500);
                     this.state = 'stand'}, time) ;//how long to run animation
                 // if (game.pause){clearTimeout(this.emoteTimeOut)}; 
             }
@@ -541,7 +591,8 @@ export default class Mob{
             
         }
 
-        this.hitbox = [this.position.x, this.position.y, this.width, this.height]; 
+        this.hitbox = [this.position.x+this.width2/2, this.position.y+this.height2, 
+                this.width-this.width2, this.height]; 
         
 
 

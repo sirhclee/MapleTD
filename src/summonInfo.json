@@ -4,10 +4,10 @@
             "speed": "0", "proj": ["redBall", "fireball2"], "name": "Red Dragon", 
             "stand": [7, 9], "walk": 0, "die":0, "angry": [3,6],
             "sprite": "pet", "xOff":-55, "yOff":-48,
-            "emote": {"0":[["ignore",3, 2000],["bewildered",3, 1500],["sit",4, 5000],["sleep",4, 5000],["cry",3, 5000], ["turn",8, 3200]],
-            "1":[["nothing",4, 1500],["bewildered",4, 1500],["sit",5, 5000],["sleep",5, 6000],["cry",4, 5000],["nothing",4, 1500]] },
+            "emote": {"0":[["ignore",3, 2000],["bewildered",3, 1500],["sit",4, 5000],["sleep",4, 8000],["cry",3, 5000], ["turn",8, 3200]],
+            "1":[["nothing",4, 1500],["bewildered",4, 1500],["sit",5, 5000],["sleep",5, 8000],["cry",4, 5000],["nothing",4, 1500]] },
             "spriteType": ["redDragonBaby","redDragon"], 
-            "atkSpd": 110, "damage": 2, 
+            "atkSpd": 100, "damage": 2, 
             "value": 100
         }, 
     "blueDragon": 
@@ -15,8 +15,8 @@
             "speed": "0", "proj":  ["blueBall", "iceball"],"name": "Blue Dragon", 
             "stand": [7, 9], "walk": 0, "die":0, "angry": [3,6],
             "sprite": "pet", "xOff":-55, "yOff":-48, 
-            "emote": {"0":[["ignore",3, 2000],["bewildered",3, 1500],["sit",4, 5000],["sleep",4, 5000],["cry",3, 5000],["turn",8, 3200]],
-            "1":[["nothing",4, 1500],["bewildered",4, 1500],["sit",5, 5000],["sleep",5, 6000],["cry",4, 5000],["nothing",4, 1500]] },
+            "emote": {"0":[["ignore",3, 2000],["bewildered",3, 1500],["sit",4, 5000],["sleep",4, 8000],["cry",3, 5000],["turn",8, 3200]],
+            "1":[["nothing",4, 1500],["bewildered",4, 1500],["sit",5, 5000],["sleep",5, 8000],["cry",4, 5000],["nothing",4, 1500]] },
              "spriteType": ["blueDragonBaby", "blueDragon"],
             "atkSpd": 100, "damage": 2, 
             "value": 100
@@ -27,8 +27,8 @@
             "stand": [7, 9], "walk": 0, "die":0, "angry": [3,6],
             "sprite": "pet", "xOff":-55, "yOff":-48,
             "spriteType": ["greenDragonBaby","greenDragon"],
-            "emote": {"0":[["ignore",3, 2000],["bewildered",3, 1500],["sit",4, 5000],["sleep",4, 5000],["cry",3, 5000],["turn",8, 3200]],
-            "1":[["nothing",4, 1500],["bewildered",4, 1500],["sit",5, 5000],["sleep",5, 6000],["cry",4, 5000],["nothing",4, 1500]] },
+            "emote": {"0":[["ignore",3, 2000],["bewildered",3, 1500],["sit",4, 5000],["sleep",4, 8000],["cry",3, 5000],["turn",8, 3200]],
+            "1":[["nothing",4, 1500],["bewildered",4, 1500],["sit",5, 5000],["sleep",5, 8000],["cry",4, 5000],["nothing",4, 1500]] },
             "atkSpd": 100, "damage": 2, 
             "value": 100
         },
@@ -39,9 +39,9 @@
             "stand": [7, 9], "walk": 0, "die":0, "angry": [3,6],
             "sprite": "pet", "xOff":-55, "yOff":-48,
             "spriteType": ["blackDragonBaby", "blackDragon"],
-            "emote": {"0":[["ignore",3, 2000],["bewildered",3, 1500],["sit",4, 5000],["sleep",4, 5000],["cry",3, 5000],["turn",8, 3200]],
-            "1":[["sigh",6, 760], ["bewildered",4, 1500],["sit",7, 5000],["sleep",6, 6000],["cry",4, 5000], ["sigh",6, 760]] },
-            "atkSpd": 110, "damage": 2, 
+            "emote": {"0":[["ignore",3, 2000],["bewildered",3, 1500],["sit",4, 5000],["sleep",4, 8000],["cry",3, 5000],["turn",8, 3200]],
+            "1":[["sigh",6, 760], ["bewildered",4, 1500],["sit",7, 5000],["sleep",6, 8000],["cry",4, 5000], ["sigh",6, 750]] },
+            "atkSpd": 100, "damage": 2, 
             "value": 100
         },  
     "mushroomKnight": 

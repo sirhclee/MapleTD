@@ -52,27 +52,19 @@
         },
     "mushmom": 
         {
-            "speed": "0.30", "health": "220", 
-            "stand": 0, "walk":5, "die":5, "angry": 12,
+            "speed": "0.3", "health": "250", 
+            "stand": 0, "walk":5, "die":5, "angry": 12,"aggro":true,
             "sprite": "mob", "boss": "true", "yOff":-10,
             "atkSpd": 200, "damage": 1, "range": 350, 
             "value": [50, 50, 50, 50, 50]
         },
     "goldMushroom1": 
         {
-            "speed": "3", "health": "1", 
+            "speed": "3", "health": "3", 
             "stand": 1, "walk":2, "die":2,
             "sprite": "mob",  "spriteType":["goldMushroom"],
             "value": [20,20,20,20,20]
         },        
-
-    "goldMushroom2": 
-        {
-            "speed": "3", "health": "1", 
-            "stand": 1, "walk":2, "die":2,
-            "sprite": "mob",  "spriteType":["goldMushroom"],
-            "value": [50,50,50,50,50]
-        },     
     "stump":
         {
             "speed": "1", "health": "10", 
@@ -98,7 +90,7 @@
     "ghostStump":
         {
             "speed": "0.75", "health": "15", 
-            "stand": 0, "walk":3, "die":2, "angry": 6,
+            "stand": 0, "walk":3, "die":2, "angry": 6, "aggro":true,
             "atkSpd": 250, "damage": 1, "range": 600, "proj":"fireball",
             "sprite": "mob",  
             "value": 20
@@ -106,84 +98,96 @@
      "boar":
         {
             "speed": "2.5", "health": "10", 
-            "stand": 0, "walk":2, "die":1, 
+            "stand": 0, "walk":2, "die":1, "height2":18,
             "sprite": "mob",  
             "value": 10
         },       
     "fireBoar":
         {
-            "speed": "2.5", "health": "4", 
+            "speed": "3.5", "health": "10", 
             "stand": 0, "walk":2, "die":1, 
-            "sprite": "mob",  
-            "value": 10
+            "sprite": "mob",  "height2":18,
+            "value": 15
         },     
     "ironBoar":
         {
-            "speed": "1.5", "health": "15", 
+            "speed": "1.5", "health": "30", 
             "stand": 0, "walk":1, "die":1, 
-            "sprite": "mob",  
-            "value": 20
+            "sprite": "mob",  "height2":18,
+            "value": 30
         },
-
+    "goldMushroom2": 
+        {
+            "speed": "3.5", "health": "10", 
+            "stand": 1, "walk":2, "die":2,
+            "sprite": "mob",  "spriteType":["goldMushroom"],
+            "value": [50,50,50,50,50]
+        },     
     "stumpy":
         {
-            "speed": "0.2", "health": "500", 
-            "stand": 0, "walk":5, "die":9, "angry": 13,
+            "speed": "0.5", "health": "750", 
+            "stand": 0, "walk":5, "die":9, "angry": 13, "aggro":true, 
             "sprite": "mob",  "boss": "true", "proj":"batball", 
-            "atkSpd": 300, "damage": 2, "range": 600, 
-            "value":[100,100,100] 
-            
+            "atkSpd": 100, "damage": 2, "range": 600, 
+            "value":[80,80,80,80,80]             
         },
         
     "neckiJr":
         {
-            "speed": "2", "health": "10", 
+            "speed": "2.5", "health": "10", 
             "stand": 0, "walk":2, "die":2, 
-            "sprite": "mob",  
+            "sprite": "mob", "height":50, "height2":35, "width2":25,  
             "value":15
         },
     "stirge":
         {
-            "speed": "1", "health": "15", 
+            "speed": "2.5", "health": "20", 
             "stand": 0, "walk":1, "die":3, 
-            "sprite": "mob",  
+            "sprite": "mob", "roam":true,
             "value":15
         },   
     "bubbling":
         {
-            "speed": "1", "health": "15", 
+            "speed": "1.5", "health": "20", 
             "stand": 0, "walk":6, "die":3, 
             "sprite": "mob",  
             "value":15
         }, 
      "octopus":
         {
-            "speed": "1", "health": "15", 
+            "speed": "3", "health": "70", 
             "stand": 0, "walk":4, "die":3, 
-            "sprite": "mob",  
-            "value":15
+            "sprite": "mob", "weird": true, 
+            "value":20
         },                 
     "wraith":
         {
-            "speed": "1", "health": "30", 
-            "stand": 0, "walk":3, "die":5, 
-            "sprite": "mob", 
-            "value": 30 
+            "speed": "4", "health": "70", 
+            "stand": 0, "walk":3, "die":5, "width2":-20, "damage": 2, 
+            "sprite": "mob", "flip":true,  "roam":true, 
+            "value": 50
         },
     "jrWraith":
         {
-            "speed": "1", "health": "10", 
+            "speed": "4", "health": "35", 
             "stand": 0, "walk":3, "die":5, 
-            "sprite": "mob",  
-            "value":10
+            "sprite": "mob", "flip":true,   
+            "value":25
         },
     "shade":
         {
-            "speed": "5", "health": "100", 
-            "stand": 0, "walk":5, "die":5, 
-            "sprite": "mob", "roam":true, 
-            "value":1000
-        } 
+            "speed": "3", "health": "200", 
+            "stand": 0, "walk":5, "die":5, "damage":999, 
+            "sprite": "mob", "roam":true, "flip":true, 
+            "value":[100,100,100,100,100]
+        },
+    "goldMushroom3": 
+        {
+            "speed": "3", "health": "25", 
+            "stand": 1, "walk":2, "die":2,
+            "sprite": "mob",  "spriteType":["goldMushroom"],
+            "value": [100,100,100,100,100]
+        }
 
         
 }

@@ -5,7 +5,7 @@ export default class Player {
     constructor(game){
         this.gameWidth = game.gameWidth;
         this.gameHeight = game.gameHeight;
-        this.width = 60; //sprite size 
+        this.width = 40; //sprite size 
         this.height = 80; 
         this.position = {  //position 
             x: this.width/2, 
@@ -138,9 +138,9 @@ export default class Player {
 
     attack(pause){
         if (this.attackCD <= 0 && this.alive && !pause ){
-            let x = this.position.x-22; 
-            if (this.left){x +=58;}
-            this.proj = new Projectile(this, 'lightningball',x, this.position.y-15);
+            let x = this.position.x-25; 
+            if (this.left){x +=50;}
+            this.proj = new Projectile(this, 'lightningball',x, this.position.y);
 
             
             this.state = this.attackAnim.shift(); 
@@ -151,8 +151,9 @@ export default class Player {
             //setTimeout(()=> {this.projectiles.push(this.proj)}, "200"); //slight delay for animation
 
             for (let i=0; i<this.elementList.length; i++){
-                let x = this.elePositions[i][0]+70;//facing left
-                if (!this.left){x = this.elePositions[i][0]-40};
+                let x = this.elePositions[i][0];//facing left
+                if (this.left){x +=20};
+                
                 this.proj = new Projectile(this, this.elementInfo[this.elementList[i]]['proj'],
                         x, this.elePositions[i][1]+18 );
                 this.projectiles.push(this.proj);
@@ -175,14 +176,14 @@ export default class Player {
         let image = animation.getImage(pause);   //get sprite
 
         // if (this.invulnTime%4>=1 && this.invulnTime>0 && this.alive) {ctx.globalAlpha = 0.2};
-        //ctx.fillRect(this.position.x+15, this.position.y, this.width, this.height) //hitbox
+        //if (this.hitbox){ ctx.fillRect(this.hitbox[0],this.hitbox[1], this.hitbox[2], this.hitbox[3]);}
         //ctx.fillRect(this.curTile*80, this.position.y, 80, 80); //selected tile
         // ctx.fillRect(this.hitbox[0]-(75*(-1+this.lootMulti)), this.position.y, this.width, 80); //loot range
         // ctx.fillRect(this.hitbox[0], this.position.y, this.width+75*(-1+this.lootMulti), 80); //loot range
 
         if (this.left){
             ctx.scale(-1,1);
-            ctx.drawImage(image, -this.position.x-1.5*this.width-10, this.position.y);
+            ctx.drawImage(image, -this.position.x-1.5*this.width-15, this.position.y);
         }
         else {ctx.drawImage(image, this.position.x-5, this.position.y); }
         
@@ -241,7 +242,7 @@ export default class Player {
                     ctx.scale(-1,1);
                     ctx.drawImage(this.elementLoadedSprite[eleType], -this.elePositions[i][0]-this.width-45, this.elePositions[i][1]); 
                     ctx.setTransform(1,0,0,1,0,0);}
-                else (ctx.drawImage(this.elementLoadedSprite[eleType], this.elePositions[i][0], this.elePositions[i][1])); 
+                else (ctx.drawImage(this.elementLoadedSprite[eleType], this.elePositions[i][0]-20, this.elePositions[i][1])); 
         }
         this.elementLoadedSprite = {} //clear loaded sprites
 
@@ -254,6 +255,9 @@ export default class Player {
             ctx.drawImage(graveImage, this.graveX, this.graveY);
             
         }
+    }
+
+    drawProj(ctx, pause){
         this.projectiles.forEach( (object)=>object.draw(ctx, pause) ) //draw projectiles 
     }
 

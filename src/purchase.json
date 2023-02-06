@@ -1,21 +1,25 @@
 {
     "redDragon":["Summons a Red Dragon to spit hot fire", "",
-                 "Level 1: Baby Dragon", "Level 2: +25% Damage & +1 Projectile",
-                 "Level 3: Evolve! Adds explosion damage", "Level 4+: Increase explosion area + 1 Proj."
+                 "Level 1: Baby Dragon", "Level 2: +30% Damage & +1 Projectile",
+                 "Level 3: Evolve! Adds explosion damage", 
+                 "Level 4+: Increase explosion area + 1 Proj."
                 ],
     "blueDragon":["Summons a Blue Dragon to spew frost", "",
-                "Level 1: Baby Dragon", "Level 2: +1 Projectile & +1 Pierce",
-                "Level 3: Evolve! Chill enemies & +2 Pierce", "Level 4+: Increase chill effect + 1 Proj."
+                "Level 1: Baby Dragon", "Level 2: +1 Pierce & +1 Projectile",
+                "Level 3: Evolve! Adds chill effect", 
+                "Level 4+: Increase chill effect + 1 Proj."
                ],
     "greenDragon":["Summons a Green Dragon to spread poison", "",
                 "Level 1: Baby Dragon", "Level 2: +1 Projectile",
-                "Level 3: Evolve! Adds damage over time", "Level 4+: Increased poison effect + 1 Proj."
+                "Level 3: Evolve! Adds poison damage", 
+                "Level 4+: Increase poison effect + 1 Proj."
               ],
     "blackDragon":["Summons a Black Dragon to shoot bolts", "",
-                "Level 1: Baby Dragon", "Level 2: +1 Projectile",
-                "Level 3: Evolve! Adds column damage", "Level 4+: Increase column area + 1 Proj."
+                "Level 1: Baby Dragon", "Level 2: +20% Damage & +1 Projectile",
+                "Level 3: Evolve! Adds thunder pillar damage", 
+                "Level 4+: Increase thunder area + 1 Proj."
              ],
-    "mushroomKnight":["Under development" ],
+    "mushroomKnight":["Under development"],
 
     "Blaze": ["Summons Elemental: Blaze", "",
             "Adds +1 projectile to attacks",
