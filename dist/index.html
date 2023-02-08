@@ -4,16 +4,71 @@
         <meta charset="UTF-8">
         <meta http-equiv="X-UA-Compatible" content="IE=edge">
         <meta name="viewport" content="width=device-width, initial-scale=1.0">
-        <title>Arcade</title>
+        <title>MapleTD</title>
         <script defer src="main.js"></script>
         <link rel="stylesheet" href="style.css">
+
+        <script>
+            function hideDisplay(id){
+                var x = document.getElementById(id)
+                if (x.style.display==="none"){
+                    x.style.display="block";}
+                    else {
+                        x.style.display="none";
+                    }
+                }
+        </script>
+
       </head>
+      
 <body>
    
     <canvas id = "gameScreen" width ="1000", height = "500"> 
          <div id = "sprites"></div>
          <div id = "menu"></div> 
     </canvas>
+
+
+    <button id=controlButton onclick="hideDisplay('hiddenInfo')"> Game Info </button>  
+    <div id="hiddenInfo">
+        <div id="infoBox">
+            <img id="controlDiv" src ="images/bg/keyboard.png">
+            <h4>General</h4>
+            <li>Defeat monsters to collect mesos (coins)</li>
+            <li>Spend mesos on upgrades to defeat more monsters</li>
+            <li>Monsters can escape without consequence; expect for lost mesos </li>
+            <li>Mesos disappear after 20 seconds</li>
+
+            <h4>Dragons</h4>
+            <li>Dragons start small, but becomes more powerful with upgrades</li>
+            <li>Press [Z] near a dragon to recall/resummon them</li>
+            <li>Each dragon has their own strengths:
+                <ul>
+                <li> Red Dragon's attacks deals explosive damage to all mobs in the lane</li>
+                <li> Blue Dragon's attacks pierce & slow down mobs</li>
+                <li> Green Dragon's attacks apply ramping poison damage to mobs</li>
+                <li> Black Dragon's attacks create a bolt that damages mobs in every lane</li>
+                </ul>
+            </li>
+            <h4>Elemental Sprites</h4>
+                <li>A maximum of five Elemental Sprites can be purchased</li>     
+                <li>Multiple sprites of the same element may be purchased to stack their effects</li>
+                <li>The Elemental Sprites provide direct bonuses to the Wizard
+                <ul>
+                    <li> Blaze provides the highest damage boost</li>
+                    <li> Dawn increases range for looting mesos </li>
+                    <li> Night provides increased knockback effect </li>
+                    <li> Wind increases both attack & movement speed </li>
+                    <li> Thunder provides pierce to projectiles</li>
+
+                </ul>                
+                </li>
+
+
+
+
+        </div>
+    </div>
    
    
 

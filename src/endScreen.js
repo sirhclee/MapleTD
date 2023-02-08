@@ -35,7 +35,7 @@ export default class endScreen{
 
         redraw(ctx){
             for (let i = 0; i<this.buttonsList.length; i++){
-             this.drawButton(this.buttonsList[i], this.buttonPositions[i][0], this.buttonPositions[i][1], ctx)
+              this.drawButton(this.buttonsList[i], this.buttonPositions[i][0], this.buttonPositions[i][1], ctx)
             }
         }
 
@@ -51,7 +51,7 @@ export default class endScreen{
             const y = e.clientY - canvas.offsetTop;
             
             for (let i = 0; i<this.buttonsList.length; i++){
-                this.drawButton(this.buttonsList[i], this.buttonPositions[i][0], this.buttonPositions[i][1], ctx)
+               // this.drawButton(this.buttonsList[i], this.buttonPositions[i][0], this.buttonPositions[i][1], ctx)
                 if (this.display && ctx.isPointInPath(x,y)) { //button click (only when displayed)
                     if (game.gameOver){
                         this.display = false; 
@@ -127,7 +127,7 @@ export default class endScreen{
                                 text1='Level ' +game.level+ ' Clear!';
                             }
                             else { text1='Wave Clear!';}
-                            text2 = 'Press [D] to start next wave!';
+                            text2 = 'Press [A] to open shop or [D] to start next wave';
                         }
                         ctx.fillStyle = 'black';
                         ctx.font = this.font2; 

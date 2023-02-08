@@ -31,7 +31,7 @@ export default class startScreen{
             const canvas = document.getElementById('gameScreen');
             
             var elem = this;
-            canvas.addEventListener('click', function(e){elem.handleClick(e, game) }, false);            
+            //canvas.addEventListener('click', function(e){elem.handleClick(e, game) }, false);            
         }
 
         redraw(ctx){

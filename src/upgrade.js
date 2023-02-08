@@ -127,7 +127,7 @@ export default class Upgrade{
         let buttonDraw = this.buttonsList.length; 
         if (!game.waveFinish){buttonDraw-=1}; 
         for (let i = 0; i<buttonDraw ; i++){
-            this.drawButton(this.buttonsList[i], this.buttonPositions[i][0], this.paddingY+(this.buttonHeight+this.paddingY)*this.buttonPositions[i][1], ctx, game)
+            // this.drawButton(this.buttonsList[i], this.buttonPositions[i][0], this.paddingY+(this.buttonHeight+this.paddingY)*this.buttonPositions[i][1], ctx, game)
             
             if (this.display && ctx.isPointInPath(x,y)) { //button click (only when displayed)
                 this.buttonsList[i].focus(); 
@@ -200,7 +200,7 @@ export default class Upgrade{
     toggleMenu(game){ 
         this.display = !this.display; 
         if (this.display){game.pause = true}
-        else game.pause = false ;
+        else game.pause = false
     }
 
     purchase(game){

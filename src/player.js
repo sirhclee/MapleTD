@@ -18,7 +18,7 @@ export default class Player {
         this.rowHeight = game.rowHeight;
         this.lane = 1; 
         this.floor =  this.gameHeight - 45 - (1+this.lane)*this.rowHeight
-        this.speed = 3;
+        this.speed = 3.5;
         this.knockbackForce = 0; 
         this.left = false;
         this.side =0;
@@ -28,7 +28,7 @@ export default class Player {
         this.gravityTime = 1; 
         this.projectiles = [];
         this.name = 'Wiz';
-        this.health = 100; 
+        this.health = 50; 
         this.damage = 1; 
         this.damageDealt = 0; 
         this.invulnTime =  0; 
@@ -60,7 +60,7 @@ export default class Player {
         this.elementals();
 
         this.summonCount = 0; 
-        this.money = 800;  //50
+        this.money = 50;  //50
         if (game.level == 2) {this.money = 1200} //starting money based on level;
         else if (game.level == 3) {this.money = 5000}
         this.summonCost = [50, 100, 150, 200, 640];

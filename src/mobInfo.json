@@ -128,7 +128,7 @@
             "speed": "0.5", "health": "750", 
             "stand": 0, "walk":5, "die":9, "angry": 13, "aggro":true, 
             "sprite": "mob",  "boss": "true", "proj":"batball", 
-            "atkSpd": 100, "damage": 2, "range": 600, 
+            "atkSpd": 100, "damage": 5, "range": 600, 
             "value":[80,80,80,80,80]             
         },
         

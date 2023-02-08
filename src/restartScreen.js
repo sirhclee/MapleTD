@@ -48,7 +48,7 @@ export default class restartScreen{
             const y = e.clientY - canvas.offsetTop;
             
             for (let i = 0; i<this.buttonsList.length; i++){
-                this.drawButton(this.buttonsList[i], this.buttonPositions[i][0], this.buttonPositions[i][1], ctx)
+               // this.drawButton(this.buttonsList[i], this.buttonPositions[i][0], this.buttonPositions[i][1], ctx)
                 if (this.display && ctx.isPointInPath(x,y)) { //button click (only when displayed)
                     this.restartFunctions(game, i); 
                 }

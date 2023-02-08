@@ -28,7 +28,7 @@ export default class Game{
         this.playerObjects =[];
         this.mobObjects =[]; 
         this.moneyObjects = []; 
-        this.level = 3;
+        this.level = 1;
         this.finalLevel =3 ; 
         this.wave = 0; 
         this.lane = 1; 
@@ -47,6 +47,7 @@ export default class Game{
         this.waveFinish = true; 
         this.levelFinish = false ; //close stats menu
         
+        this.firstLoad = 0; 
         this.noteTime = 0; 
         this.gameTime = 0; //played game time for events; 
         this.gameTimeReal = 0; //tracks time against pauses 
@@ -141,6 +142,7 @@ export default class Game{
     }
     
     titleMenu(ctx){ 
+
         this.title.displayMenu(ctx, this); 
     }
 
@@ -415,18 +417,15 @@ export default class Game{
                 
                 if (obj1.hitbox[0]+obj1.hitbox[2]+obj1.range>target.hitbox[0] || 
                     obj1.hitbox[0]-obj1.range<target.hitbox[0]+target.hitbox[2]){ //aggro from right
-                        if (obj1.hitbox[1]<target.hitbox[1] && obj1.hitbox[1]+obj1.hitbox[3]>target.hitbox[1] ||
-                            obj1.lane == target.lane){
-                         {if (obj1.aggro){obj1.attack()}; //only aggro mobs have attack animations
+                        if (obj1.aggro && obj1.side == 1 && obj1.position.x+150<this.gameWidth){obj1.attack()} //enemies attack on CD
+                        else if (obj1.hitbox[1]<target.hitbox[1] && obj1.hitbox[1]+obj1.hitbox[3]>target.hitbox[1] &&  obj1.side == 0 ){
+                            obj1.attack()
                             }
                         }
-                        else if (obj1.aggro && obj1.side == 1 ){obj1.attack()}; //enemies attack on CD
-
                 }
 
             }
-         }
-     }
+    }
     
     lootMoney(obj1, obj2){
         for (const target of obj2){ //-(this.width*(-1+this.lootMulti))

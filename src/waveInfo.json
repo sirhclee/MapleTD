@@ -10,7 +10,7 @@
     
     "wave1-0":[ ["spore", 2, 2]],
     "wave1-1":
-        [ ["spore", 2, 2], ["spore", 2, 3], ["spore", 2, 4],["spore", 2, 5], ["spore", 2, 6],
+        [ ["stumpy", 2, 2], ["spore", 2, 3], ["spore", 2, 4],["spore", 2, 5], ["spore", 2, 6],
             ["spore", 1, 10], ["spore", 1, 11], ["spore", 1, 12],["spore", 1, 13], ["spore", 1, 14]
         ],
     "wave1-2":   

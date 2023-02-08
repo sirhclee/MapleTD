@@ -33,9 +33,9 @@ export default class titleScreen{
         this.buttonHeight = 35; 
         this.buttonX1 = this.gameWidth/2-(this.buttonWidth/2);
         
-        this.buttonPositions = [ [this.buttonX1, 2*this.gameHeight/3-5], 
+        this.buttonPositions = [ [this.buttonX1, this.padding+this.buttonHeight + 2*this.gameHeight/3-45], 
             [this.buttonX1, this.padding+this.buttonHeight + 2*this.gameHeight/3-25]] 
-        this.buttonsList = [this.button1, this.button2]
+        this.buttonsList = [this.button2]
 
         this.levelButtons = [ this.button3, this.button4]; 
         this.levelButtonWidth = 50; 
@@ -45,13 +45,14 @@ export default class titleScreen{
         [this.gameWidth/2+this.levelButtonCenter/2, this.buttonPositions[1][1]+40]]; 
 
         this.fade = 1;
+        this.fadeDirect =-1;
         }
 
         initialize(game){
             const canvas = document.getElementById('gameScreen');
             
             var elem = this;
-            canvas.addEventListener('click', function(e){elem.handleClick(e, game) }, false);            
+            //canvas.addEventListener('click', function(e){elem.handleClick(e, game) }, false);            
             //canvas.addEventListener('mouseover', function(e){elem.handleHover(e) }, false);
         }
 
@@ -112,7 +113,7 @@ export default class titleScreen{
                 ctx.font = this.font2;}
             else if (e1.textContent=='Level Select'){
                 ctx.font = this.font3;
-                buttonHeight -=11;
+                //buttonHeight -=11;
                 y+=10
             }
             else {ctx.font = this.font3;
@@ -164,9 +165,10 @@ export default class titleScreen{
 
                 ctx.font =  this.font; //about
                 ctx.globalAlpha = this.fade; 
-                ctx.fillText('Press any key', this.gameWidth/2,this.gameHeight/2+55); 
-                this.fade-=0.010;
-                if (this.fade<0.25){this.fade = 1}
+                ctx.fillText('Use arrow keys to select level', this.gameWidth/2,this.gameHeight/2+55); 
+                ctx.fillText('Press any other key to start', this.gameWidth/2,this.gameHeight/2+75); 
+                this.fade-=0.015*this.fadeDirect ;
+                if (this.fade<0.5 || this.fade>1){this.fadeDirect = -this.fadeDirect }
                 ctx.globalAlpha = 1;
 
                 for (let i=0; i<this.aboutText.length; i++){ 

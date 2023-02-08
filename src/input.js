@@ -4,7 +4,7 @@ export default class InputHandler{
             switch(event.keyCode){ //a:65; s:83; d:68, w: 87;
 
                 case 37: //left arrow
-                    if (Game.titleDisplay && Game.level>1){Game.level--}
+                    if (Game.titleDisplay && !Game.fadeOut && Game.level>1){Game.level--}
                     else if (upgrade.display){
                         if(upgrade.selectionX>1){upgrade.selectionX-=1}
                     }
@@ -14,7 +14,7 @@ export default class InputHandler{
                         break;
 
                 case 39: //right arrow
-                    if (Game.titleDisplay && Game.level<Game.finalLevel){Game.level++}
+                    if (Game.titleDisplay && !Game.fadeOut && Game.level<Game.finalLevel){Game.level++}
                     else if (upgrade.display){
                             if(upgrade.selectionX<2){upgrade.selectionX+=1};
                             }
@@ -62,8 +62,9 @@ export default class InputHandler{
 
                 case 68: //D start wave
                     if (Game.waveFinish && Game.storage.length==0){
-                        Game.nextWave = true; 
-                        Game.startMenu.display = false}; 
+                        if (Game.gameTimeReal-Game.firstLoad>5000){
+                            Game.nextWave = true; 
+                            Game.startMenu.display = false}; }
                     break
 
                 case 27: // ESC
@@ -147,6 +148,7 @@ export default class InputHandler{
                 default:
                     if (Game.titleDisplay){
                         Game.fadeOut = true;
+                        Game.firstLoad = Game.gameTimeReal;
                         setTimeout(() =>{Game.titleDisplay = false;
                             Game.resetEverything(); 
                         }, 800)}

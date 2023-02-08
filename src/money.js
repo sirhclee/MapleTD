@@ -74,7 +74,7 @@ export default class Money{
             else if (game.player.position.x>this.position.x) this.position.x+=0.8;
         }
 
-        if (game.gameTimeReal-this.spawnTime>=18000){ //18 s 
+        if (game.gameTimeReal-this.spawnTime>=20000){ //18 s 
             this.startFade=true;
             this.lost = true; 
         }
