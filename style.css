@@ -1,24 +1,61 @@
 :root{
-    background: steelblue;
+    background: rgb(49, 61, 71);
 }
 
 
-img{
+
+.hiddenInfo{
     display: none; 
+    width:100px;
+} 
+
+#controlDiv{
+    display: none; 
+    padding-top:15px;
+    padding-bottom:10px;
+} 
+
+#infoBox{
+    background-color: rgb(28, 43, 43);
+    width: 800px;
+    margin-left:auto;
+    margin-right:auto;  
+    border-radius: 10px;
+
 }
 
-canvas{
+
+h4, li{
+    margin-left:90px;
+    margin-right:auto;  
+    padding-bottom:4px; 
+    color:white;
+    font-family: Sans-Serif;
+}
+
+ul{
+    margin-left:-60px;
+}
+
+button{
+    margin:5px;
+    padding: 5px 40px 5px 40px;
+    color:green;
+}
+
+
+#controlDiv, button, canvas{
     padding-left:0;
     padding-right:0;
     margin-left:auto;
     margin-right:auto;
     display: block;
-    
 }
 
 
 #gameScreen{
     border: 1px solid black;
+    border-radius:3px;
 }
 
 .flex-container{ 
