@@ -80,14 +80,14 @@ export default class startScreen{
                 ctx.strokeStyle = "black";
                 ctx.lineWidth = "5"; 
                 ctx.beginPath();
-                ctx.roundRect(this.x+0.3*this.width, this.height+20, 0.4*this.width, 25, 2);
+                ctx.roundRect(this.x+0.3*this.width, this.height+20, 0.5*this.width, 25, 2);
                 ctx.stroke();
                 ctx.fill();
 
                 ctx.font = this.font; 
                 ctx.fillStyle = 'black';
                 ctx.textAlign = 'center'; 
-                ctx.fillText('Press [A] for upgrades', this.gameWidth/2, this.height+35) 
+                ctx.fillText('Press [A] for shop, [D] to start', this.gameWidth/2, this.height+35) 
             }
 
             if (game.levelNote!=''){

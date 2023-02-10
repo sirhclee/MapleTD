@@ -48,7 +48,7 @@ export default class Player {
         this.elementSprites = {};
         this.elementLoadedSprite = {} ; 
         this.elementInfo = { 'Blaze': {'stand':7, 'move': 7, 'attack': 8, 'proj':'redBall' },
-            'Dawn': {'stand': 15, 'move':15, 'attack': 8, 'proj':'yellowBall'},
+            'Dawn': {'stand': 7, 'move':7, 'attack': 8, 'proj':'yellowBall'},
             'Night': {'stand':7, 'move':7, 'attack': 8, 'proj':'purpleBall'},
             'Thunder': {'stand': 7, 'move':7, 'attack': 8, 'proj':'greenBall',}, 
             'Wind': {'stand': 7, 'move':7, 'attack': 8, 'proj':'blueBall',} }
@@ -65,7 +65,7 @@ export default class Player {
         else if (game.level == 3) {this.money = 5000}
         this.summonCost = [50, 100, 150, 200, 640];
         this.upgradeCost = [200, 400, 800, 1600, 3200]; 
-        this.elementCost = [50, 100, 200, 400, 800]; 
+        this.elementCost = [150, 500, 1000, 1500, 3000]; 
 
         this.damageTaken = 0; 
         
@@ -80,7 +80,7 @@ export default class Player {
         this.lootMulti = 1;
         this.knockbackMulti = 1;
         this.speedMulti = 1; 
-        this.pierce = 0; 
+        this.pierce = 1; 
 
         this.chill = 0;
         this.area = 0; 

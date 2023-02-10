@@ -9,6 +9,7 @@ import restartScreen from './restartScreen';
 import endScreen from './endScreen'; 
 import HUD from './HUD'; 
 import img from './img';
+import SpriteAnimation from './SpriteAnimation'; 
 
 export default class Game{
     constructor(gameWidth, gameHeight){
@@ -71,6 +72,12 @@ export default class Game{
         this.moneyLost = 0; 
         this.pause = false; 
         this.recallStorage=false;
+
+        //load coin sprites
+        this.coinSprites = [];//[0] = 1, [1] = 2; 
+        for (let i =1; i<=4;i++){
+         this.coinSprites.push(new SpriteAnimation('coin/Coin'+i+'_?.png', 3, 6, "stand") );
+        }
 
     }
 
@@ -139,6 +146,9 @@ export default class Game{
         this.recallStorage=false;
         this.loadBG();
         this.playerObjects = [this.player];
+        this.player.money = 50;  //50
+        if (this.level == 2) {this.player.money = 1200} //starting money based on level;
+        else if (this.level == 3) {this.player.money = 5000}
     }
     
     titleMenu(ctx){ 
@@ -257,7 +267,7 @@ export default class Game{
     
     addElement(element){ //upgrade shop 
        if (this.player.elementList.length<5){
-            if (this.player.money> this.player.elementCost[this.player.elementList.length]){
+            if (this.player.money>= this.player.elementCost[this.player.elementList.length]){
                 this.player.money -= this.player.elementCost[this.player.elementList.length];
                 this.player.elementList.push(element); 
                 this.player.elementals(); //load sprites
@@ -336,7 +346,7 @@ export default class Game{
     }
 
     createMob(parent, type, side, game = null ){
-        if (side === 0){ //Summon unit
+        if (side === 0 && !this.recallStorage){ //Summon unit
             if (!this.playerObjects.find(obj=> (obj.position.y-30 === this.player.floor) &&  //checks for existing unit 
             (obj.position.x === (this.player.curTile*80)+this.player.width/2) && (obj.name!=='Wiz'))){
                 
@@ -388,7 +398,7 @@ export default class Game{
         this.playerObjects.forEach( (object)=>object.emote(this)); 
         this.playerObjects.forEach( (object)=>object.draw(ctx,this.pause) )
         this.mobObjects.forEach( (object)=>object.draw(ctx, this.pause) );
-        this.moneyObjects.forEach( (object)=>object.draw(ctx,this.pause) ); 
+        this.moneyObjects.forEach( (object)=>object.draw(ctx,this) ); 
         this.playerObjects.forEach( (object)=>object.drawProj(ctx,this.pause) ); //player proj
         this.mobObjects.forEach( (object)=>object.drawProj(ctx, this.pause) ); //mob proj 
 
@@ -418,8 +428,8 @@ export default class Game{
                 if (obj1.hitbox[0]+obj1.hitbox[2]+obj1.range>target.hitbox[0] || 
                     obj1.hitbox[0]-obj1.range<target.hitbox[0]+target.hitbox[2]){ //aggro from right
                         if (obj1.aggro && obj1.side == 1 && obj1.position.x+150<this.gameWidth){obj1.attack()} //enemies attack on CD
-                        else if (obj1.hitbox[1]<target.hitbox[1] && obj1.hitbox[1]+obj1.hitbox[3]>target.hitbox[1] &&  obj1.side == 0 ){
-                            obj1.attack()
+                        else if (obj1.side == 0 && 
+                            obj1.hitbox[1]+15>=target.hitbox[1] && obj1.hitbox[1]<target.hitbox[1]+target.hitbox[3] ){obj1.attack()
                             }
                         }
                 }
@@ -429,8 +439,8 @@ export default class Game{
     
     lootMoney(obj1, obj2){
         for (const target of obj2){ //-(this.width*(-1+this.lootMulti))
-            if ( (obj1.hitbox[0]<target.hitbox[0] && obj1.hitbox[0]+80*(obj1.lootMulti) > target.hitbox[0]) || //obj1 on left
-                (obj1.hitbox[0] > target.hitbox[0]+target.hitbox[2] && obj1.hitbox[0]-80*(obj1.lootMulti-1)<target.hitbox[0]+target.hitbox[2] )){ //obj1 on right
+            if ( (obj1.hitbox[0]<target.hitbox[0] && obj1.hitbox[0]+obj1.hitbox[2]+80*(obj1.lootMulti-0.8) > target.hitbox[0]) || // player -> money
+                (obj1.hitbox[0] > target.hitbox[0]+target.hitbox[2] && obj1.hitbox[0]-80*(obj1.lootMulti-0.8)<target.hitbox[0]+target.hitbox[2] )){ //money <- player
                 if (obj1.hitbox[1]<target.hitbox[1] && obj1.hitbox[1]+obj1.hitbox[3]>target.hitbox[1]){
                     if (!target.startFade){
                         obj1.money += target.value; 
@@ -482,7 +492,7 @@ export default class Game{
                     if (obj1.hitbox[1]>target.hitbox[1] && obj1.hitbox[1]<target.hitbox[1]+target.hitbox[3]){ //y-bounding
                         if (obj1.projectile && !obj1.explode && !obj1.hitList.includes(target.name)){
                             if (target.side == 0){
-                                if(target.lane == obj1.lane){ //player only can hit from proj in lane
+                                if(target.lane == obj1.lane){ //player only can get hit from proj in lane
                                     this.damageCalc(obj1, target, obj3);
                                     obj1.pierce -= 1;  
                                     obj1.hitList.push(target.name);                                    

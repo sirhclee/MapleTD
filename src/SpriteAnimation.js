@@ -7,7 +7,7 @@ export default class SpriteAnimation{
             const image = img(fileName.replace("?", i)); 
             this.images.push(image); 
         }
-
+        this.numberOfImages = numberOfImages;
         this.timerCount = timerCount;
         this.timerCountDefault = this.timerCount; 
         this.imageIndex = 0; 
@@ -31,6 +31,22 @@ export default class SpriteAnimation{
         this.setImageIndex(pause); 
         return this.images[this.imageIndex]; 
     }
+
+    imagebyFrame(frame){ //manual export image
+        return this.images[frame]; 
+    }
+
+    moveFrame(obj, pause){
+        obj.timerCount--;
+        if (obj.timerCount <= 0 && !this.shouldStop()){
+            obj.timerCount= this.timerCountDefault; 
+            if (!pause) {obj.frame++;} //animate only when unpaused
+            if (obj.frame >= this.images.length){
+                obj.frame = 0; 
+            }
+        }
+    }
+
 
     setImageIndex(pause){
         this.timerCount--;

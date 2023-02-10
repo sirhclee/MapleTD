@@ -24,21 +24,21 @@
         },
     "orangeMushroom":
         {
-            "speed": "1", "health": "4", 
+            "speed": "1", "health": "5", 
             "stand": 1, "walk":2, "die":2, 
             "sprite": "mob",  
             "value": 5
         },
     "greenMushroom":
         {
-            "speed": "2", "health": "1", 
+            "speed": "2", "health": "2", 
             "stand": 1, "walk":2, "die":2,
             "sprite": "mob",  
             "value": 3
         },
     "blueMushroom":
         {
-            "speed": "1", "health": "8", 
+            "speed": "1", "health": "12", 
             "stand": 1, "walk":2, "die":2, 
             "sprite": "mob",  
             "value": 10
@@ -67,14 +67,14 @@
         },        
     "stump":
         {
-            "speed": "1", "health": "10", 
+            "speed": "1", "health": "7", 
             "stand": 0, "walk":3, "die":2, 
             "sprite": "mob",  
             "value": 10
         },    
     "darkStump":
         {
-            "speed": "1", "health": "18", 
+            "speed": "1", "health": "20", 
             "stand": 0, "walk":3, "die":2, 
             "sprite": "mob",  
             "value": 15
@@ -89,16 +89,16 @@
 
     "ghostStump":
         {
-            "speed": "0.75", "health": "15", 
+            "speed": "0.75", "health": "20", 
             "stand": 0, "walk":3, "die":2, "angry": 6, "aggro":true,
-            "atkSpd": 250, "damage": 1, "range": 600, "proj":"fireball",
+            "atkSpd": 200, "damage": 1, "range": 600, "proj":"fireball",
             "sprite": "mob",  
             "value": 20
         }, 
      "boar":
         {
             "speed": "2.5", "health": "10", 
-            "stand": 0, "walk":2, "die":1, "height2":18,
+            "stand": 0, "walk":2, "die":1, "height2":15,
             "sprite": "mob",  
             "value": 10
         },       
@@ -106,19 +106,19 @@
         {
             "speed": "3.5", "health": "10", 
             "stand": 0, "walk":2, "die":1, 
-            "sprite": "mob",  "height2":18,
+            "sprite": "mob",  "height2":15,
             "value": 15
         },     
     "ironBoar":
         {
             "speed": "1.5", "health": "30", 
             "stand": 0, "walk":1, "die":1, 
-            "sprite": "mob",  "height2":18,
+            "sprite": "mob",  "height2":15,
             "value": 30
         },
     "goldMushroom2": 
         {
-            "speed": "3.5", "health": "10", 
+            "speed": "3.5", "health": "15", 
             "stand": 1, "walk":2, "die":2,
             "sprite": "mob",  "spriteType":["goldMushroom"],
             "value": [50,50,50,50,50]
@@ -134,31 +134,31 @@
         
     "neckiJr":
         {
-            "speed": "2.5", "health": "10", 
+            "speed": "2.5", "health": "4", 
             "stand": 0, "walk":2, "die":2, 
             "sprite": "mob", "height":50, "height2":35, "width2":25,  
-            "value":15
+            "value":10
         },
     "stirge":
         {
-            "speed": "2.5", "health": "20", 
+            "speed": "2.5", "health": "9", 
             "stand": 0, "walk":1, "die":3, 
             "sprite": "mob", "roam":true,
             "value":15
         },   
     "bubbling":
         {
-            "speed": "1.5", "health": "20", 
+            "speed": "1.5", "health": "13", 
             "stand": 0, "walk":6, "die":3, 
             "sprite": "mob",  
-            "value":15
+            "value":10
         }, 
      "octopus":
         {
-            "speed": "3", "health": "70", 
+            "speed": "1.5", "health": "100", 
             "stand": 0, "walk":4, "die":3, 
             "sprite": "mob", "weird": true, 
-            "value":20
+            "value":25
         },                 
     "wraith":
         {
@@ -176,7 +176,7 @@
         },
     "shade":
         {
-            "speed": "3", "health": "200", 
+            "speed": "3", "health": "500", 
             "stand": 0, "walk":5, "die":5, "damage":999, 
             "sprite": "mob", "roam":true, "flip":true, 
             "value":[100,100,100,100,100]

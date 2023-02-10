@@ -24,35 +24,45 @@ export default class Money{
         this.startFade = false; 
         this.float = false; 
         this.lost = false; 
+        
+        this.frame = 0 
+        this.timerCount = 0; 
 
         this.hitbox = [this.position.x, this.position.y-25, this.width, this.height]; 
-        if (this.value>=100){this.type = '4';} 
-        else if (this.value>=50){this.type = '3';} 
-        else if (this.value>=10){this.type = '2';} 
-        else this.type = '1'; 
-        this.createAnimations(); 
+        if (this.value>=100){this.type = 4;} 
+        else if (this.value>=50){this.type = 3;} 
+        else if (this.value>=10){this.type = 2;} 
+        else this.type = 1; 
+        //this.createAnimations(); 
     }
     
-    createAnimations(){
-        this.stand = new SpriteAnimation('coin/Coin'+this.type+'_?.png', 3, 6, "stand");
-        this.animations = [this.stand]
-    }
+    // createAnimations(){
+    //     this.stand = new SpriteAnimation('coin/Coin'+this.type+'_?.png', 3, 6, "stand");
+    //     this.animations = [this.stand]
+    // }
 
-    draw(ctx, pause) {
+    draw(ctx, game) {
         //ctx.fillRect(this.position.x, this.position.y, this.width, this.height);
         if (this.startFade) {
             if (this.float){this.fade -= 0.015;} //slower fade when pickup
             else this.fade -= 0.03;
             ctx.globalAlpha = this.fade; 
-            setTimeout(()=> {this.delete= true}, "450") ;
+            setTimeout( ()=>{this.delete = true}, "500"); 
+
         } 
-        
-        const animation = this.animations.find((animation)=>animation.isFor('stand')); 
-        const image = animation.getImage(pause); 
+        //game.coinSprites[this.type] 
 
-
+       // const animation = this.animations.find((animation)=>animation.isFor('stand')); 
+       // const image = animation.getImage(pause); 
+       game.coinSprites[this.type-1].moveFrame(this, game.pause); 
+       const image = game.coinSprites[this.type-1].imagebyFrame(this.frame);
+       
         ctx.drawImage(image, this.position.x, this.position.y);
         ctx.globalAlpha = 1;
+
+
+        
+
 
     }
 
@@ -74,10 +84,12 @@ export default class Money{
             else if (game.player.position.x>this.position.x) this.position.x+=0.8;
         }
 
-        if (game.gameTimeReal-this.spawnTime>=20000){ //18 s 
-            this.startFade=true;
+        if (game.gameTimeReal-this.spawnTime>=20000){ //20 s fade start
+            this.startFade=true; 
             this.lost = true; 
-        }
+            
+        } 
+
 
         this.hitbox = [this.position.x, this.position.y, this.width, this.height]; 
 

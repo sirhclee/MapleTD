@@ -239,27 +239,27 @@ export default class Mob{
             player.money -= cost; 
             if (this.level==3){this.evolve()} 
             if (this.type == 'redDragon'){
-                if (this.level==2){this.projectileAmount++; this.damageMulti+=0.25}
-                else if (this.level==3){this.area += 60; this.damageMulti+=0.25}
-                else if (this.level>=4){this.area += 30; this.projectileAmount ++};
+                if (this.level==2){this.projectileAmount++; this.damageMulti+=0.5}
+                if (this.level==3){this.area += 60; this.damageMulti+=0.5}
+                if (this.level==4){this.area +=40; this.projectileAmount++};
             };
-
+    
             if (this.type == 'blueDragon'){
-                if (this.level==2){this.projectileAmount++;}
-                else if (this.level==3){this.chill += 0.2; this.pierce += 1}
-                else if (this.level>=4){this.chill += 0.1; this.projectileAmount ++};
+                if (this.level==2){this.projectileAmount++; this.pierce += 1; this.damageMulti+=0.2}
+                if (this.level==3){this.chill += 0.2; this.pierce += 1; this.damageMulti+=0.2}
+                if (this.level==4){this.chill += 0.1; this.projectileAmount++};
             };
             if (this.type == 'greenDragon'){
-                if (this.level==2){this.projectileAmount++;}
-                else if (this.level==3){this.poison += 0.6; this.poisonMax+=6;this.pierce += 1}
-                else if (this.level>=4 ){this.poison += 0.6; this.poisonMax+=3; this.projectileAmount ++}
+                if (this.level==2){this.projectileAmount++;this.damageMulti+=0.2}
+                if (this.level==3){this.poison += 0.7; this.area += 25; this.poisonMax+=10;}
+                if (this.level==4 ){this.poison += 0.7; this.area += 10; this.poisonMax+=10; this.projectileAmount++}
             };
             if (this.type == 'blackDragon'){
-                if (this.level==2){this.projectileAmount++; this.damageMulti+=0.2}
-                else if (this.level==3){this.area +=20; this.column=1;this.damageMulti+=0.2}
-                else if (this.level>=4){this.area +=20; this.projectileAmount ++}
-            };
+                if (this.level==2){this.projectileAmount++; this.damageMulti+=0.3}
+                if (this.level==3){this.area +=15; this.column=1;this.damageMulti+=0.3}
+                if (this.level==4){this.area +=15; this.projectileAmount++}
         }
+    }
         // stat updates .damageMulti
     }
 
@@ -346,7 +346,7 @@ export default class Mob{
 
     draw(ctx, pause) {
         const animation = this.animations.find((animation)=>animation.isFor(this.state))
-        //if (this.hitbox){ ctx.fillRect(this.hitbox[0],this.hitbox[1], this.hitbox[2], this.hitbox[3]);}
+       // if (this.hitbox){ ctx.fillRect(this.hitbox[0],this.hitbox[1], this.hitbox[2], this.hitbox[3]);}
         //ctx.fillRect(this.position.x, this.position.y, this.width, this.height); 
         //ctx.fillRect(this.position.x-this.range, this.position.y, this.width+2*this.range, this.height); //range
         if (this.side == 0 && this.form==1 && this.state=='attack'){this.xOff2 = -51} //attack offset

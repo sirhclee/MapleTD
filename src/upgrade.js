@@ -97,8 +97,7 @@ export default class Upgrade{
         else if (game.playerObjects.find(obj=> (obj.type === button.value))){ //upgrade summons 
             let unit = game.playerObjects.find(obj=> (obj.type === button.value));
             unit.levelUp(game.player); //add cost 
-            console.log(unit.level);
-            
+
             if (unit.level<5){
             button.textContent =  'Upgrade '+this.nameHash[button.value]+ ' (Lvl '+unit.level+')';}
             else {button.textContent =  this.nameHash[button.value]+ ' (Lvl '+unit.level+')' }
@@ -151,7 +150,6 @@ export default class Upgrade{
                 else ( cost = game.player.summonCost[game.player.summonCount]);
                
                 if (game.player.money< cost){
-                    
                     buttonColor = 'lightgrey';
                     textColor = 'darkgrey'; 
                 }
@@ -164,6 +162,8 @@ export default class Upgrade{
                     textColor = 'darkgrey'; 
                     }
                 }    
+            else {buttonColor = 'lightgrey'; //WIP
+                textColor = 'darkgrey';}
             }
             
         ctx.fillStyle = buttonColor;  //button background
